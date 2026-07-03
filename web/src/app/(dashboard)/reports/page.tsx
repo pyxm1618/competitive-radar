@@ -99,6 +99,21 @@ export default function ReportsPage() {
                     <Skeleton className="h-4 w-5/6" />
                     <Skeleton className="h-4 w-4/6" />
                   </div>
+                ) : detail.isError ? (
+                  <div className="py-6 text-center">
+                    <p className="text-sm font-medium">Couldn&apos;t load this report</p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {detail.error instanceof Error ? detail.error.message : "Unknown error."}
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="mt-4"
+                      onClick={() => detail.refetch()}
+                    >
+                      Try again
+                    </Button>
+                  </div>
                 ) : detail.data ? (
                   <>
                     <div className="mb-4 flex items-start justify-between gap-3">

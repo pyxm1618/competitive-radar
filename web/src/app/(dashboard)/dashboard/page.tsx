@@ -89,8 +89,8 @@ export default function OverviewPage() {
             <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
               Recent signals
             </h2>
-            <Link href="/changes" className="text-sm text-primary hover:underline">
-              View all changes
+            <Link href="/signals" className="text-sm text-primary hover:underline">
+              View all signals
             </Link>
           </div>
           <AsyncState
@@ -147,8 +147,11 @@ export default function OverviewPage() {
           </ChartCard>
 
           <Card>
-            <CardHeader className="pb-3">
+            <CardHeader className="flex-row items-center justify-between space-y-0 pb-3">
               <CardTitle className="text-base">Competitors</CardTitle>
+              <Link href="/competitors" className="text-sm text-primary hover:underline">
+                View all
+              </Link>
             </CardHeader>
             <CardContent className="pt-0">
               <AsyncState

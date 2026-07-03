@@ -1,15 +1,16 @@
 "use client";
 
 import {
-  Activity,
+  Building2,
   GitCompareArrows,
   Home,
   LayoutDashboard,
   Menu,
-  Radar,
   FileText,
   Settings,
+  Signal,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
@@ -21,10 +22,15 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+  { href: "/competitors", label: "Competitors", icon: Building2 },
+  { href: "/signals", label: "Signals", icon: Signal },
   { href: "/changes", label: "Changes", icon: GitCompareArrows },
   { href: "/reports", label: "Reports", icon: FileText },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
+
+// The bottom bar fits five comfortably; Settings stays in the sidebar/menu.
+const MOBILE_NAV = NAV.filter((n) => n.href !== "/settings");
 
 function isActive(pathname: string, href: string): boolean {
   return href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
@@ -63,9 +69,14 @@ function NavLinks({ pathname, onNavigate }: { pathname: string; onNavigate?: () 
 function Brand() {
   return (
     <Link href="/dashboard" className="flex items-center gap-2 px-1 py-1">
-      <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground">
-        <Radar className="h-4 w-4" />
-      </span>
+      <Image
+        src="/compete-logo.svg"
+        alt="compete logo"
+        width={32}
+        height={32}
+        priority
+        className="h-8 w-8 rounded-lg"
+      />
       <span className="text-base font-semibold tracking-tight">compete</span>
     </Link>
   );
@@ -116,10 +127,16 @@ export function AppShell({ children }: { children: ReactNode }) {
             </DialogContent>
           </Dialog>
 
-          <div className="flex items-center gap-2 md:hidden">
-            <Activity className="h-4 w-4 text-primary" />
+          <Link href="/dashboard" className="flex items-center gap-2 md:hidden">
+            <Image
+              src="/compete-logo.svg"
+              alt="compete logo"
+              width={24}
+              height={24}
+              className="h-6 w-6 rounded-md"
+            />
             <span className="font-semibold">compete</span>
-          </div>
+          </Link>
 
           <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
@@ -132,8 +149,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       </div>
 
       {/* Mobile bottom nav */}
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t bg-background/95 backdrop-blur md:hidden">
-        {NAV.map(({ href, label, icon: Icon }) => {
+      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t bg-background/95 backdrop-blur md:hidden">
+        {MOBILE_NAV.map(({ href, label, icon: Icon }) => {
           const active = isActive(pathname, href);
           return (
             <Link
