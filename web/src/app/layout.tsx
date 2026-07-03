@@ -19,8 +19,13 @@ const serif = Instrument_Serif({
   display: "swap",
 });
 
+// Absolute base for canonical + OG/Twitter URLs. Override per-deploy with
+// NEXT_PUBLIC_SITE_URL (set in Vercel to the real domain); the fallback is the
+// intended production URL so shares still resolve if the env var is missing.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://compete.yerradouani.me";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://compete.local"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "compete — Competitive Intelligence, on autopilot",
     template: "%s · compete",

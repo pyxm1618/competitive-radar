@@ -99,6 +99,12 @@ export function useRunPipeline() {
   return useMutation({
     mutationFn: (body: { provider?: string; limit?: number }) => api.runPipeline(body),
     onSuccess: (r) => {
+      // In the static demo there is no backend to run; be honest about it
+      // rather than claiming a run started.
+      if (r.status === "demo") {
+        toast.info("Demo mode", { description: r.detail });
+        return;
+      }
       toast.success("Pipeline started", { description: r.detail });
       setTimeout(() => qc.invalidateQueries(), 4000);
     },

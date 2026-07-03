@@ -18,6 +18,7 @@ import httpx
 
 from pipeline.config import Settings, get_settings
 from pipeline.logging_setup import get_logger
+from pipeline.schemas import RawPage
 
 log = get_logger(__name__)
 
@@ -68,12 +69,12 @@ class RobotsCache:
                 follow_redirects=True,
             )
             if resp.status_code >= 400:
-                rp = _AllowAll()  # type: ignore[assignment]
+                rp = _AllowAll()
             else:
                 rp.parse(resp.text.splitlines())
         except Exception as exc:  # network failure -> fail open but log
             log.warning("robots.txt fetch failed for %s (%s); allowing", host, exc)
-            rp = _AllowAll()  # type: ignore[assignment]
+            rp = _AllowAll()
         with self._lock:
             self._cache[host] = rp
         return rp
@@ -149,3 +150,7 @@ class Collector:
 
     def throttle(self, url: str) -> None:
         self.throttler.wait(url, self._effective_delay(url))
+
+    def collect(self, competitor_id: str, url: str) -> list[RawPage]:
+        """Fetch a tracked URL into snapshots. Implemented by each subclass."""
+        raise NotImplementedError

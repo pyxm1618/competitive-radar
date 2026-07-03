@@ -90,11 +90,11 @@ def _llm_narrative(payload_json: str, settings: Settings) -> str | None:
         if provider == "ollama":
             from openai import OpenAI
 
-            client = OpenAI(base_url=settings.ollama_base_url, api_key="ollama")
-            resp = client.chat.completions.create(
+            oai = OpenAI(base_url=settings.ollama_base_url, api_key="ollama")
+            oresp = oai.chat.completions.create(
                 model=settings.ollama_model, messages=[{"role": "user", "content": prompt}]
             )
-            return (resp.choices[0].message.content or "").strip() or None
+            return (oresp.choices[0].message.content or "").strip() or None
     except Exception as exc:
         log.warning("LLM narrative unavailable (%s); using templated summary", exc)
     return None

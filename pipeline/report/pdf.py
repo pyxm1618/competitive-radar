@@ -11,7 +11,7 @@ from fpdf.enums import XPos, YPos
 # Map common Unicode punctuation to latin-1-safe equivalents (fpdf core fonts).
 _REPLACEMENTS = {
     "-": "-",
-    "-": "-",  # noqa: RUF001
+    "-": "-",
     "•": "-",
     "≥": ">=",
     "≤": "<=",

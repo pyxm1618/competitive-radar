@@ -3,6 +3,45 @@
 `compete` has three deployable pieces: the **scheduled pipeline**, the **API**,
 and the **web dashboard**. All can run on free tiers.
 
+## Recommended: server-less static dashboard ($0, no backend)
+
+The dashboard data is curated and changes at most weekly, so production does not
+need a live Python server at all. We **bake every API response into static JSON**
+shipped with the Next.js app and read it directly in the browser — no FastAPI,
+no VM, no cold starts, genuinely $0 forever on static hosting.
+
+How it works:
+
+1. `scripts/export_static_data.py` drives the real FastAPI app via `TestClient`
+   and writes each response to `web/public/api-static/**` (JSON + rendered report
+   PDFs). Shapes match the Pydantic schemas exactly.
+2. `web/.env.production` sets `NEXT_PUBLIC_STATIC_DATA=1`, so a production build of
+   the web app reads from `/api-static` instead of `/api`
+   (see `web/src/lib/api.ts`). Filtering, sorting and pagination for the
+   signals/changes feeds run client-side; competitor CRUD and "Run pipeline"
+   persist to a `localStorage` overlay for the visitor's session
+   (`web/src/lib/static-store.ts`).
+3. The weekly GitHub Actions run regenerates the JSON and commits it back, which
+   triggers a Vercel redeploy. Until then the committed snapshot is served.
+
+**Deploy to Vercel (Hobby, free):**
+
+```
+Root directory:   web
+Framework preset: Next.js          (vercel.json already sets this)
+Env:              (none required — NEXT_PUBLIC_STATIC_DATA=1 comes from .env.production)
+```
+
+That is the whole deploy. To refresh the data locally:
+`uv run python scripts/export_static_data.py` then commit `web/public/api-static`.
+
+> Note: `/competitors/[id]` is rendered on-demand (a free Vercel serverless
+> function); everything else is fully static. To make it static too, add
+> `generateStaticParams` to that route.
+
+The sections below describe the **alternative live-backend** topology (a real
+hosted FastAPI), useful if you want write-through CRUD or on-demand pipeline runs.
+
 ## Topology
 
 ```
@@ -83,8 +122,8 @@ embeddings, collection throttle/robots, alerts, and API host/port/CORS.
 | LLM extraction | Gemini Flash / Groq free tier, or Ollama local / mock | $0 |
 | Embeddings | local hashing (default) or local MiniLM | $0 |
 | Warehouse | DuckDB + Parquet (file) | $0 |
-| API host | Oracle Always Free VM / Fly.io free | $0 |
-| Dashboard | Vercel Hobby | $0 |
+| API host | none (static JSON) — or Oracle Always Free VM / Fly.io for live mode | $0 |
+| Dashboard | Vercel Hobby (static) | $0 |
 | Alerts | Slack webhook / SMTP | $0 |
 
 **Total: $0** with the default/local providers; only paid if you exceed an LLM

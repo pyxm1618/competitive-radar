@@ -354,14 +354,16 @@ class Warehouse:
         return dict(zip(cols, row, strict=True))
 
     def count_raw_pages(self) -> int:
-        return int(self.conn.execute("SELECT count(*) FROM raw.raw_pages").fetchone()[0])
+        row = self.conn.execute("SELECT count(*) FROM raw.raw_pages").fetchone()
+        return int(row[0]) if row else 0
 
     def count(self, table: str) -> int:
         """Row count for a raw.* table; 0 if it doesn't exist yet."""
         if not table.replace("_", "").isalnum():
             raise ValueError(f"invalid table name: {table}")
         try:
-            return int(self.conn.execute(f"SELECT count(*) FROM raw.{table}").fetchone()[0])
+            row = self.conn.execute(f"SELECT count(*) FROM raw.{table}").fetchone()
+            return int(row[0]) if row else 0
         except duckdb.Error:
             return 0
 

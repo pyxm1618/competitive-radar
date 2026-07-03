@@ -1,15 +1,27 @@
 # compete - Competitive Intelligence Platform
 
-Scheduled agents monitor a configurable list of competitors (websites, blogs,
-pricing pages, news, job postings), extract **structured signals** with an LLM,
-warehouse everything in **DuckDB**, detect meaningful changes, and serve a
-polished, responsive dashboard with auto-generated weekly reports.
+**Watch every move your competitors make.** compete runs scheduled agents over a
+configurable list of competitors (websites, blogs, pricing pages, news, job
+postings), extracts **structured signals** with an LLM, warehouses everything in
+**DuckDB**, detects meaningful changes, and serves a polished, responsive
+dashboard with auto-generated weekly reports.
 
-> Status: **complete** - config-driven collection (static/dynamic/RSS/jobs),
-> snapshot-diff change detection, provider-agnostic LLM extraction, a dbt
-> warehouse (staging → marts + tests), a typed FastAPI, a polished responsive
-> Next.js dashboard (light/dark), weekly markdown→PDF reports, and optional
-> Slack/email alerts. Runs end-to-end on free/local tooling.
+### ➜ [**Live demo**](https://compete.yerradouani.me) &nbsp;·&nbsp; [Docs](https://compete.yerradouani.me/docs) &nbsp;·&nbsp; [Write-up](https://yerradouani.me)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-lime.svg)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](web/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-typed-009688?logo=fastapi&logoColor=white)](api/)
+[![DuckDB](https://img.shields.io/badge/DuckDB-warehouse-FFF000?logo=duckdb&logoColor=black)](warehouse/)
+[![dbt](https://img.shields.io/badge/dbt-staging→marts-FF694B?logo=dbt&logoColor=white)](warehouse/)
+[![Deploy: static $0](https://img.shields.io/badge/deploy-static%20%240-brightgreen)](docs/DEPLOYMENT.md)
+
+The public demo is fully **server-less**: every API response is baked to static
+JSON and served from Vercel at **$0** (see
+[ADR 0004](docs/adr/0004-static-snapshot-deploy.md)). A weekly GitHub Action
+refreshes the data. Config-driven collection (static/dynamic/RSS/jobs),
+snapshot-diff change detection, provider-agnostic LLM extraction, a dbt
+warehouse (staging → marts + tests), a typed FastAPI, a light/dark Next.js
+dashboard, and weekly markdown→PDF reports - all on free/local tooling.
 
 ## Screenshots
 
@@ -142,10 +154,11 @@ polite per-host throttling; honest User-Agent; never scrapes behind logins.
 | LLM extraction | Gemini Flash / Groq free tier · Ollama/`mock` local | $0 |
 | Embeddings | local hashing (default) or MiniLM | $0 |
 | Warehouse | DuckDB + Parquet (file) | $0 |
-| API host | Oracle Always Free VM / Fly.io | $0 |
-| Dashboard | Vercel Hobby | $0 |
+| API host | none — responses baked to static JSON (or Oracle/Fly.io for live mode) | $0 |
+| Dashboard | Vercel Hobby (static) | $0 |
 
-**$0** with default/local providers. See [DEPLOYMENT](docs/DEPLOYMENT.md).
+**$0** with default/local providers. The public demo needs no backend at all -
+see [DEPLOYMENT](docs/DEPLOYMENT.md) and [ADR 0004](docs/adr/0004-static-snapshot-deploy.md).
 
 ## Documentation
 
@@ -154,7 +167,7 @@ polite per-host throttling; honest User-Agent; never scrapes behind logins.
 - [AGENTS](docs/AGENTS.md) - extraction schema, prompt, retry loop, providers, cost controls
 - [RUNBOOK](docs/RUNBOOK.md) - add a competitor, backfill, fix a scraper, rate limits
 - [DEPLOYMENT](docs/DEPLOYMENT.md) - GitHub Actions, Vercel, API host, env/secrets
-- [ADRs](docs/adr/) - DuckDB vs Postgres · snapshot-diffing · deterministic pipeline
+- [ADRs](docs/adr/) - DuckDB vs Postgres · snapshot-diffing · deterministic pipeline · static-snapshot deploy
 - [CONTRIBUTING](CONTRIBUTING.md) - setup and quality gates
 
 ## License

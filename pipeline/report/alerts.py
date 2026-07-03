@@ -60,8 +60,8 @@ def _send_email(s: Settings, subject: str, body: str) -> bool:
     try:
         msg = EmailMessage()
         msg["Subject"] = subject
-        msg["From"] = s.smtp_user  # type: ignore[assignment]
-        msg["To"] = s.alert_email_to  # type: ignore[assignment]
+        msg["From"] = s.smtp_user
+        msg["To"] = s.alert_email_to
         msg.set_content(body)
         with smtplib.SMTP(s.smtp_host, s.smtp_port, timeout=15) as server:  # type: ignore[arg-type]
             server.starttls()
