@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
+import { DocsToc } from "@/components/docs/docs-toc";
 import { LandingFooter } from "@/components/landing/landing-footer";
 import { LandingNav } from "@/components/landing/landing-nav";
 
@@ -28,7 +29,7 @@ function Section({ id, n, title, children }: { id: string; n: string; title: str
   return (
     <section id={id} className="scroll-mt-28 border-t border-border py-10 first:border-t-0 first:pt-0">
       <div className="flex items-baseline gap-3">
-        <span className="font-serif text-base italic text-primary">({n})</span>
+        <span className="text-2xl font-semibold tracking-tight">{n}.</span>
         <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
       </div>
       <div className="mt-5 space-y-4 text-[0.95rem] leading-relaxed text-foreground/85">{children}</div>
@@ -86,9 +87,9 @@ export default function DocsPage() {
     <div className="relative min-h-screen bg-background text-foreground">
       <LandingNav />
 
-      <main className="mx-auto max-w-[1640px] px-4 pb-20 pt-28 sm:px-6 sm:pt-32">
+      <main className="mx-auto max-w-[1100px] px-4 pb-20 pt-28 sm:px-6 sm:pt-32">
         {/* Page header */}
-        <header className="max-w-3xl">
+        <header className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
             Documentation
           </p>
@@ -100,7 +101,7 @@ export default function DocsPage() {
             it, and where it falls short. It is written for engineers who want to evaluate or
             extend the project.
           </p>
-          <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
+          <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
             <span>
               Stack: <span className="text-foreground">Python 3.12, DuckDB, dbt, FastAPI, Next.js 14</span>
             </span>
@@ -112,32 +113,11 @@ export default function DocsPage() {
 
         <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-[220px,minmax(0,1fr)]">
           {/* TOC */}
-          <nav aria-label="Table of contents" className="hidden lg:block">
-            <div className="sticky top-24">
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                Contents
-              </p>
-              <ul className="mt-4 space-y-1 border-l border-border">
-                {TOC.map((t, i) => (
-                  <li key={t.id}>
-                    <a
-                      href={`#${t.id}`}
-                      className="block border-l-2 border-transparent py-1 pl-4 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
-                    >
-                      <span className="mr-2 font-mono text-xs text-muted-foreground/60">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      {t.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </nav>
+          <DocsToc items={TOC} />
 
           {/* Content */}
-          <article className="max-w-3xl">
-            <Section id="overview" n="01" title="Overview">
+          <article className="mx-auto max-w-3xl">
+            <Section id="overview" n="I" title="Overview">
               <p>
                 compete monitors a configurable list of companies and turns changes on their
                 public web presence into structured records called signals. A signal has a type
@@ -157,7 +137,7 @@ export default function DocsPage() {
               </p>
             </Section>
 
-            <Section id="architecture" n="02" title="Architecture">
+            <Section id="architecture" n="II" title="Architecture">
               <Code>{`collect            extract              transform           serve
 ┌──────────┐     ┌──────────────┐     ┌─────────────┐     ┌──────────┐
 │ httpx    │     │ change gate  │     │ DuckDB raw  │     │ FastAPI  │
@@ -181,7 +161,7 @@ export default function DocsPage() {
               </p>
             </Section>
 
-            <Section id="collection" n="03" title="Collection">
+            <Section id="collection" n="III" title="Collection">
               <p>
                 Each tracked URL declares a source type in <K>competitors.yaml</K>, and a registry
                 dispatches it to the right collector. All four collectors implement the same
@@ -226,7 +206,7 @@ export default function DocsPage() {
               </p>
             </Section>
 
-            <Section id="extraction" n="04" title="Extraction">
+            <Section id="extraction" n="IV" title="Extraction">
               <p>
                 Extraction is the only place the system calls an LLM, and the design treats the
                 model as an unreliable component. The client is provider agnostic: Gemini Flash
@@ -247,7 +227,7 @@ export default function DocsPage() {
               </p>
             </Section>
 
-            <Section id="change-detection" n="05" title="Change detection">
+            <Section id="change-detection" n="V" title="Change detection">
               <p>
                 Most pages do not change between runs, and sending unchanged content to an LLM is
                 wasted money. Before extraction, each page goes through a two-stage gate:
@@ -271,7 +251,7 @@ export default function DocsPage() {
               </p>
             </Section>
 
-            <Section id="warehouse" n="06" title="Warehouse">
+            <Section id="warehouse" n="VI" title="Warehouse">
               <p>
                 Storage is a single DuckDB file. Raw tables hold pages, signals, detected
                 changes, LLM call logs, and reports. dbt builds staging views on top of raw, then
@@ -307,7 +287,7 @@ export default function DocsPage() {
               </p>
             </Section>
 
-            <Section id="api" n="07" title="API">
+            <Section id="api" n="VII" title="API">
               <p>
                 A FastAPI service reads the warehouse and exposes it as JSON. The interesting
                 parts are less the endpoints than the edge handling:
@@ -336,7 +316,7 @@ export default function DocsPage() {
               </p>
             </Section>
 
-            <Section id="frontend" n="08" title="Frontend">
+            <Section id="frontend" n="VIII" title="Frontend">
               <p>
                 The dashboard is Next.js 14 (App Router) with TypeScript. UI primitives (button,
                 card, dialog, select, tabs) are hand-built in the shadcn style on Radix, charts
@@ -358,7 +338,7 @@ export default function DocsPage() {
               </p>
             </Section>
 
-            <Section id="reports-alerts" n="09" title="Reports and alerts">
+            <Section id="reports-alerts" n="IX" title="Reports and alerts">
               <p>
                 A weekly brief is generated from the marts: top changes by weighted significance,
                 per-competitor activity, and pricing movements. The body of the report is
@@ -380,7 +360,7 @@ export default function DocsPage() {
               </p>
             </Section>
 
-            <Section id="operations" n="10" title="Operations">
+            <Section id="operations" n="X" title="Operations">
               <p>Local setup, from a fresh clone:</p>
               <Code>{`uv sync --extra dev --extra dbt --extra api   # Python env + deps
 uv run compete init-db                        # create the DuckDB schema
@@ -400,7 +380,7 @@ cd web && npm install && npm run dev          # dashboard on :3000`}</Code>
               </p>
             </Section>
 
-            <Section id="limitations" n="11" title="Limitations">
+            <Section id="limitations" n="XI" title="Limitations">
               <p>
                 Things that are honest to call out, in rough order of how much they would matter
                 in production:
