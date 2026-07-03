@@ -14,6 +14,7 @@ const LINKS = [
   { href: "/#how", label: "Process" },
   { href: "/#signals", label: "Signals" },
   { href: "/docs", label: "Docs" },
+  { href: "/notes", label: "Notes" },
 ];
 
 export function LandingNav() {
