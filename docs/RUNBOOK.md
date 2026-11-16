@@ -81,11 +81,10 @@ competitors:
         signal_hint: other
 ```
 
-**Important:** In V1 this file is intentionally empty (`competitors: []`). The
-real ~55-competitor list has **not** been supplied. **Do NOT invent, scrape, or
-research competitors to populate it, and do NOT fabricate the 55.** Import the
-authoritative list in one pass when available. The clearly-labelled sample at
-`config/examples/competitors.sample.yaml` is for tests / demo only and is **not**
+**Important:** The confirmed 55-object onboarding set is now populated in this
+authority (34 Tier 1 / 21 Tier 2). Do not add, remove, substitute, or re-rank
+competitors without explicit human authority. The clearly-labelled sample at
+`config/examples/competitors.sample.yaml` remains tests/demo only and is **not**
 authoritative. The frontend must never hardcode a competitor list (checked by
 `tests/test_radar_authority.py`).
 
@@ -194,20 +193,19 @@ a **read-only renderer** with exactly four first-level entries: Radar (default),
 Topics, Competitors, Evidence. Deploy the built app to Vercel; no backend and no
 API keys are needed (see [DEPLOYMENT.md](./DEPLOYMENT.md)).
 
-### Troubleshoot: empty authority
+### Troubleshoot: unexpectedly empty authority
 
 Symptom: `radar collect` reports no targets / no snapshots, the frontend shows
 an empty competitor list.
 
-- This is **expected** in V1: `config/competitors.yaml` is intentionally
-  `competitors: []` because the real ~55-competitor list has **not** been
-  supplied.
-- **Do not** fix it by inventing competitors or by un-commenting the sample
-  fixture as production data.
+- This is **not expected** after the 55-object onboarding. Confirm the current
+  branch contains the populated `config/competitors.yaml`.
+- **Do not** repair it by inventing competitors or by promoting the sample
+  fixture to production authority.
 - For tests / local demo only, use
   `config/examples/competitors.sample.yaml` or `radar demo-build`.
-- When the authoritative list is available, import it into
-  `config/competitors.yaml` in one pass and re-run `radar collect`.
+- Restore the confirmed authority from version control, then re-run
+  `radar collect`.
 
 ### Troubleshoot: missing model keys
 
