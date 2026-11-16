@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "request_id": "req-7ed4cf94e93c440150ab",
+  "competitor_id": "daily-growth",
+  "topic_ids": [
+    "action-plan",
+    "tracking",
+    "follow-up"
+  ],
+  "research_question": "Daily Growth 研究型 App 当前情境识别与即时微干预交互是什么？",
+  "why_needed": "论文可确认研究设计，但产品仍属研究原型，公开页面不足以观察实际微干预体验。",
+  "suggested_steps": [
+    "获取论文补充材料、公开 demo 或经授权研究版本",
+    "记录触发情境",
+    "记录微干预内容与完成后的反馈"
+  ],
+  "required_evidence": [
+    {
+      "label": "触发情境证据",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "微干预界面",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "完成/反馈状态",
+      "required": true,
+      "satisfied": false
+    }
+  ],
+  "status": "open",
+  "created_at": "2026-11-16T06:38:00Z",
+  "created_by": "competitive-radar-onboarding",
+  "related_change_id": null,
+  "related_intelligence_id": null,
+  "notes": "Onboarding baseline request; do not bypass authentication, platform access controls, or device authorization."
+}

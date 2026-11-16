@@ -145,6 +145,115 @@ def test_collect_detect_prepare_end_to_end(tmp_path: Path, monkeypatch) -> None:
     assert item.provenance["diff_engine"] == "pipeline/detect/change.py"
 
 
+def test_fresh_baseline_then_identical_then_real_change(tmp_path: Path, monkeypatch) -> None:
+    settings = _settings(tmp_path, monkeypatch)
+    settings.diff_similarity_threshold = 0.9
+    config = _config(tmp_path)
+
+    # Avoid network I/O while exercising the real Radar collect -> detect ->
+    # persistence boundary. The seeded rows are exactly what collection writes.
+    monkeypatch.setattr(
+        "pipeline.radar.pending.collect_all",
+        lambda _settings: {"urls": 1, "snapshots": 1, "failed": 0},
+    )
+
+    baseline_time = datetime(2026, 1, 1, tzinfo=UTC)
+    wh = Warehouse.from_settings(settings)
+    wh.upsert_raw_page(
+        RawPage(
+            id="snap-baseline",
+            competitor_id="sample-alpha",
+            url=URL,
+            source_type=SourceType.STATIC,
+            raw_html="<html></html>",
+            clean_text=OLD_TEXT,
+            content_hash="hash-baseline",
+            fetched_at=baseline_time,
+        )
+    )
+    wh.close()
+
+    first = run_collect(settings, config)
+    assert first.detected_changes == 0
+
+    wh = Warehouse.from_settings(settings)
+    assert wh.count("raw_pages") == 1
+    assert wh.count("changes") == 0
+    wh.close()
+
+    out_dir = tmp_path / "pending"
+    first_prepared = run_prepare(settings, path=config, out_dir=out_dir)
+    assert first_prepared.changes_read == 0
+    assert first_prepared.created == 0
+    assert load_pending(out_dir) == []
+
+    # Identical content has the same deterministic page id/hash and therefore
+    # refreshes the baseline snapshot without creating a second snapshot/change.
+    wh = Warehouse.from_settings(settings)
+    wh.upsert_raw_page(
+        RawPage(
+            id="snap-baseline",
+            competitor_id="sample-alpha",
+            url=URL,
+            source_type=SourceType.STATIC,
+            raw_html="<html></html>",
+            clean_text=OLD_TEXT,
+            content_hash="hash-baseline",
+            fetched_at=baseline_time + timedelta(days=1),
+        )
+    )
+    wh.close()
+
+    second = run_collect(settings, config)
+    assert second.detected_changes == 0
+
+    wh = Warehouse.from_settings(settings)
+    assert wh.count("raw_pages") == 1
+    assert wh.count("changes") == 0
+    wh.close()
+
+    second_prepared = run_prepare(settings, path=config, out_dir=out_dir)
+    assert second_prepared.changes_read == 0
+    assert second_prepared.created == 0
+    assert load_pending(out_dir) == []
+
+    # A later meaningful snapshot has a previous baseline and must retain the
+    # existing deterministic UPDATED-change path.
+    wh = Warehouse.from_settings(settings)
+    wh.upsert_raw_page(
+        RawPage(
+            id="snap-changed",
+            competitor_id="sample-alpha",
+            url=URL,
+            source_type=SourceType.STATIC,
+            raw_html="<html></html>",
+            clean_text=NEW_TEXT,
+            content_hash="hash-changed",
+            fetched_at=baseline_time + timedelta(days=2),
+        )
+    )
+    wh.close()
+
+    third = run_collect(settings, config)
+    assert third.detected_changes == 1
+
+    wh = Warehouse.from_settings(settings)
+    rows = wh.query("SELECT change_type, prev_hash, new_hash FROM raw.changes ORDER BY detected_at")
+    wh.close()
+    assert rows == [("updated", "hash-baseline", "hash-changed")]
+
+    third_prepared = run_prepare(settings, path=config, out_dir=out_dir)
+    assert third_prepared.changes_read == 1
+    assert third_prepared.created == 1
+
+    items = load_pending(out_dir)
+    assert len(items) == 1
+    assert items[0].change_type == "updated"
+    assert items[0].before_snapshot is not None
+    assert items[0].before_snapshot.content_hash == "hash-baseline"
+    assert items[0].after_snapshot.content_hash == "hash-changed"
+
+
 def test_prepare_duplicate_prevention_and_stable_ids(tmp_path: Path, monkeypatch) -> None:
     settings = _settings(tmp_path, monkeypatch)
     config = _config(tmp_path)

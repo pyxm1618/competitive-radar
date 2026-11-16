@@ -8,9 +8,9 @@ this change worth your attention?).
 
 This repository is a **thin V1 layer on top of upstream
 [`yassnemo/compete`](https://github.com/yassnemo/compete)** (MIT). The guiding
-principle is **reuse first, modify minimally**. The real ~55-competitor list has
-**not** been supplied, so the competitor authority `config/competitors.yaml` is
-intentionally empty in V1. No paid LLM API is used.
+principle is **reuse first, modify minimally**. The confirmed 55-object onboarding
+set is now populated in `config/competitors.yaml` (34 Tier 1 / 21 Tier 2).
+No paid LLM API is used.
 
 - Target repo: `pyxm1618/competitive-radar`
 - Feature branch: `feat/competitive-radar-v1`
@@ -37,7 +37,7 @@ Antigravity, not by the CLI.
 ```
 Collection → Snapshot → Diff → Pending Intelligence Queue → Antigravity → Intelligence Output → Frontend
 
-config/competitors.yaml  (competitor authority; intentionally empty in V1)
+config/competitors.yaml  (competitor authority; 55 onboarded objects)
 config/topics.yaml       (topic taxonomy authority; 13 topics)
         |
         v
@@ -75,7 +75,7 @@ intelligence agent, **not** a web-app runtime dependency.
 
 | Concern | Single source of truth | Exact path |
 |---|---|---|
-| Competitors | `config/competitors.yaml` (intentionally `competitors: []` in V1) | `config/competitors.yaml` |
+| Competitors | `config/competitors.yaml` (55 onboarded objects: 34 Tier 1 / 21 Tier 2) | `config/competitors.yaml` |
 | Topic taxonomy | `config/topics.yaml` (13 topics) | `config/topics.yaml` |
 | Raw evidence | upstream `raw.raw_pages` (DuckDB) + `data/raw/*.parquet` | no second raw-evidence DB |
 | Change detection | deterministic diff between snapshots (upstream `pipeline/detect/change.py`) | AI cannot decide a change happened |
@@ -177,12 +177,11 @@ competitors:
 
 Then run `radar collect` (the upstream sync is part of `radar collect`).
 
-**Important:** In V1 this file is intentionally empty (`competitors: []`). The
-real ~55-competitor list has **not** been supplied. **Do NOT invent, scrape, or
-research competitors to populate it, and do NOT fabricate the 55.** Import the
-authoritative list here in one pass when it is available. A clearly-labelled
-sample fixture at `config/examples/competitors.sample.yaml` is for **tests / demo
-only** and is **not** authoritative.
+**Important:** The confirmed 55-object onboarding set is now populated here
+(34 Tier 1 / 21 Tier 2). Do not add, remove, substitute, or re-rank competitors
+without explicit human authority. The clearly-labelled sample fixture at
+`config/examples/competitors.sample.yaml` remains **tests / demo only** and is
+**not** authoritative.
 
 ## How to add manual evidence
 
@@ -236,9 +235,9 @@ or the web app.
 
 ## Known limitations
 
-- `config/competitors.yaml` is intentionally empty; the real ~55-competitor list
-  has not been supplied. No collection runs against real competitors until it is
-  populated. Never fabricate it.
+- `config/competitors.yaml` contains the confirmed 55-object onboarding set.
+  Public monitoring can still be incomplete for app-only, authenticated,
+  research-prototype, or hardware flows; those gaps use manual research requests.
 - Intelligence analysis is human-triggered; there is no scheduled auto-analysis.
 - Impact and Confidence are independent human judgements; records carry a
   `human_review_status` and require human review.

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "request_id": "req-d763de8269c1bf018eea",
+  "competitor_id": "rice-ai",
+  "topic_ids": [
+    "assessment",
+    "action-plan",
+    "tracking",
+    "follow-up"
+  ],
+  "research_question": "RICE AI 当前如何把 Goal、Outcome 与后续调整连接成闭环？",
+  "why_needed": "公开官网与商店页无法充分展示登录后的目标、结果与调整机制。",
+  "suggested_steps": [
+    "记录首次评估/目标设置",
+    "完成一次训练或干预任务",
+    "记录结果如何影响下一步计划"
+  ],
+  "required_evidence": [
+    {
+      "label": "目标设置截图",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "结果/Outcome 截图",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "后续调整截图",
+      "required": true,
+      "satisfied": false
+    }
+  ],
+  "status": "open",
+  "created_at": "2026-11-16T06:38:00Z",
+  "created_by": "competitive-radar-onboarding",
+  "related_change_id": null,
+  "related_intelligence_id": null,
+  "notes": "Onboarding baseline request; do not bypass authentication, platform access controls, or device authorization."
+}

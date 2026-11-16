@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "request_id": "req-8d05fdc881e7fffc56f7",
+  "competitor_id": "sword-health",
+  "topic_ids": [
+    "tracking",
+    "action-plan",
+    "expert-service",
+    "follow-up"
+  ],
+  "research_question": "Sword Health 当前公开产品、Care Journey 与关键能力更新，在自动采集持续遭遇官方站点 HTTP 429 时应如何人工核验？",
+  "why_needed": "Sword Health 是 Tier 1 高价值对象。两轮真实采集均显示其 newsroom 和两篇产品文章被官方站点 HTTP 429 限流，不能通过暴力重试或绕过策略解决，因此需要人工研究作为监控兜底。",
+  "suggested_steps": [
+    "使用正常浏览器人工访问 Sword Health 官方 newsroom 与核心产品页面，不绕过访问控制",
+    "记录当前产品/能力/护理路径的重要变化及发布日期",
+    "保留可复核的官方页面截图和 URL；若 429 已解除，记录恢复时间"
+  ],
+  "required_evidence": [
+    {
+      "label": "Sword Health 官方 newsroom 或产品更新页面截图",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "关键能力/Care Journey 变化的官方页面证据",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "访问日期、URL 与 HTTP/可访问状态记录",
+      "required": true,
+      "satisfied": false
+    }
+  ],
+  "status": "open",
+  "created_at": "2026-11-16T07:05:00Z",
+  "created_by": "competitive-radar-onboarding",
+  "related_change_id": null,
+  "related_intelligence_id": null,
+  "notes": "Onboarding fallback for persistent rate limiting; do not bypass robots, rate limits, authentication, or access controls."
+}

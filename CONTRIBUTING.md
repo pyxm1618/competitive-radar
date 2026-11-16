@@ -82,8 +82,8 @@ These are hard rules; see [docs/AUTHORITY.md](docs/AUTHORITY.md) and
   entries (Radar, Topics, Competitors, Evidence). It must never hardcode a
   competitor list (checked by `tests/test_radar_authority.py`), never be a second
   source of truth, and never use localStorage CRUD as authority.
-- **One source of truth per concern.** `config/competitors.yaml` (competitors,
-  intentionally empty in V1), `config/topics.yaml` (topics), upstream
+- **One source of truth per concern.** `config/competitors.yaml` (the confirmed
+  55-object competitor authority), `config/topics.yaml` (topics), upstream
   `raw.raw_pages` + `data/raw/*.parquet` (raw evidence), `pipeline/detect/change.py`
   (change detection), `data/intelligence/records/` (intelligence, one format).
   No second crawler, no second diff engine, no second database, no second
@@ -92,8 +92,9 @@ These are hard rules; see [docs/AUTHORITY.md](docs/AUTHORITY.md) and
   deterministic snapshot diff. Antigravity explains already-detected changes via
   a human-triggered file protocol and writes only to
   `data/intelligence/records/` and `data/intelligence/research/`.
-- **Never invent competitors.** The real ~55-competitor list has not been
-  supplied; `config/competitors.yaml` stays empty. The sample fixture at
+- **Never invent or silently mutate competitors.** The confirmed 55-object set
+  is in `config/competitors.yaml`; additions, removals, substitutions, or
+  re-ranking require explicit human authority. The sample fixture at
   `config/examples/competitors.sample.yaml` is tests/demo only.
 - **No paid LLM API.** No model key is needed for the normal workflow. Report the
   commands you actually ran; do not claim unverified results.

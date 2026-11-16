@@ -2,43 +2,1351 @@
 # COMPETITOR AUTHORITY — config/competitors.yaml
 # ============================================================
 # This is the ONLY authoritative source for competitors and monitored URLs.
-# The frontend must never maintain its own competitor list.
-#
-# STATUS: intentionally EMPTY.
-# The real ~55-product list has not been supplied for this repository yet.
-# Do NOT invent, scrape, or research competitors to populate this file.
-# When the authoritative list is available, import it here in one pass.
-#
-# A clearly-labelled SAMPLE fixture exists at config/examples/competitors.sample.yaml.
-# It is for tests / local demo only and is NOT authoritative.
-#
-# source_type drives which upstream collector is used:
-#   static   -> httpx + selectolax + trafilatura
-#   dynamic  -> Playwright
-#   rss      -> feedparser
-#   jobs     -> jobs collector
-#
-# Optional per-competitor fields (all optional, no code changes needed):
-#   why_tracked: short reason this competitor matters to Xiaoshuyin
-#   topic_ids:   capability taxonomy ids from config/topics.yaml
-#
-# Example entry (COMMENTED OUT — do not uncomment as production data):
-# competitors:
-#   - id: example
-#     name: Example (sample only)
-#     domain: example.com
-#     industry: sample
-#     tier: 2
-#     why_tracked: sample entry used for contract tests
-#     topic_ids: [problem-discovery]
-#     tracked_urls:
-#       - url: https://example.com/
-#         source_type: static
-#         signal_hint: other
+# Imported from the confirmed 55-object onboarding list on 2026-11-16.
+# Tier 1: 34 | Tier 2: 21
+# Public official/authoritative sources are preferred. App/Mini Program/login/
+# research-prototype/hardware flows that cannot be observed safely are handled
+# through data/intelligence/research/. Do not bypass robots or access controls.
+# JSON below is valid YAML 1.2 and is loaded by the existing PyYAML authority.
 # ============================================================
-
-defaults:
-  throttle_seconds: 2.0
-  respect_robots: true
-
-competitors: []
+{
+  "defaults": {
+    "throttle_seconds": 2,
+    "respect_robots": true
+  },
+  "competitors": [
+    {
+      "id": "zhixin-huiyu",
+      "name": "知心慧语",
+      "domain": "ecnu.edu.cn",
+      "industry": "family-mental-health-ai",
+      "tier": 1,
+      "why_tracked": "问题理解 → 筛查 → 干预；公开 Web / 微信小程序入口，核心小程序流程需人工研究。",
+      "topic_ids": [
+        "problem-discovery",
+        "assessment",
+        "action-plan"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.ecnu.edu.cn/info/1094/67557.htm",
+          "source_type": "static",
+          "signal_hint": "press_release"
+        }
+      ]
+    },
+    {
+      "id": "jiachangtang",
+      "name": "家长糖",
+      "domain": "app.guixian.cn",
+      "industry": "parenting-ai",
+      "tier": 1,
+      "why_tracked": "8 周执行、反馈、复盘；核心价值在 App 内持续执行闭环。",
+      "topic_ids": [
+        "action-plan",
+        "tracking",
+        "reflection",
+        "follow-up"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://app.guixian.cn/",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "trustparent",
+      "name": "TrustParent",
+      "domain": "trustparent.io",
+      "industry": "parenting-ai",
+      "tier": 1,
+      "why_tracked": "多角色、Pattern、动态路线。",
+      "topic_ids": [
+        "assessment",
+        "family-collaboration",
+        "action-plan",
+        "tracking"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://trustparent.io/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "rice-ai",
+      "name": "RICE AI / 大米和小米",
+      "domain": "dmhxm.com",
+      "industry": "neurodevelopment-care",
+      "tier": 1,
+      "why_tracked": "Goal → Outcome → 调整；移动端与 PC 的持续训练/反馈闭环值得跟踪。",
+      "topic_ids": [
+        "assessment",
+        "action-plan",
+        "tracking",
+        "follow-up"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.dmhxm.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://apps.apple.com/cn/app/%E5%A4%A7%E7%B1%B3%E5%92%8C%E5%B0%8F%E7%B1%B3-%E5%B0%91%E5%84%BF%E8%83%BD%E5%8A%9B%E6%8F%90%E5%8D%87%E5%B9%B3%E5%8F%B0/id1522271375",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "little-otter",
+      "name": "Little Otter",
+      "domain": "littleotterhealth.com",
+      "industry": "pediatric-mental-health",
+      "tier": 1,
+      "why_tracked": "Whole-Family Formulation。",
+      "topic_ids": [
+        "diagnosis",
+        "family-collaboration",
+        "expert-service"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.littleotterhealth.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "bend-health",
+      "name": "Bend Health",
+      "domain": "bendhealth.com",
+      "industry": "pediatric-mental-health",
+      "tier": 1,
+      "why_tracked": "Measurement-Based Care。",
+      "topic_ids": [
+        "assessment",
+        "tracking",
+        "expert-service",
+        "follow-up"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.bendhealth.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "sylva",
+      "name": "Sylva",
+      "domain": "mysylva.com",
+      "industry": "family-mental-health-ai",
+      "tier": 1,
+      "why_tracked": "Needs Profile → 支持路径。",
+      "topic_ids": [
+        "assessment",
+        "diagnosis",
+        "action-plan"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.mysylva.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "spring-health-guide",
+      "name": "Spring Health / Guide",
+      "domain": "springhealth.com",
+      "industry": "digital-mental-health",
+      "tier": 1,
+      "why_tracked": "AI 贯穿 Care Journey。",
+      "topic_ids": [
+        "ai-conversation",
+        "assessment",
+        "action-plan",
+        "expert-service"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.springhealth.com/individuals/guide",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        },
+        {
+          "url": "https://www.springhealth.com/news/guide-ai-experience-improves-mental-health-outcomes",
+          "source_type": "static",
+          "signal_hint": "press_release"
+        }
+      ]
+    },
+    {
+      "id": "kairoo",
+      "name": "Kairoo",
+      "domain": "kairoo.family",
+      "industry": "family-screen-time",
+      "tier": 1,
+      "why_tracked": "共同规则 → 逐渐自主。",
+      "topic_ids": [
+        "family-collaboration",
+        "child-participation",
+        "action-plan",
+        "tracking"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://kairoo.family/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://kairoo.family/support.html",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.kairoo.parent",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        },
+        {
+          "url": "https://apps.apple.com/us/app/kairoo/id6789987246",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "innowell",
+      "name": "Innowell",
+      "domain": "innowell.org",
+      "industry": "clinical-mental-health-platform",
+      "tier": 1,
+      "why_tracked": "Adaptive Assessment；公开 Web 临床平台与 Android 已知，iOS 当前公开状态未确认，不在配置中宣称。",
+      "topic_ids": [
+        "assessment",
+        "tracking",
+        "expert-service"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://innowell.org/platform/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "one-sec",
+      "name": "one sec",
+      "domain": "one-sec.app",
+      "industry": "digital-wellbeing",
+      "tier": 1,
+      "why_tracked": "关键时刻行为干预。",
+      "topic_ids": [
+        "action-plan",
+        "tracking",
+        "follow-up"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://one-sec.app/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://one-sec.app/research",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://apps.apple.com/us/app/one-sec-screen-time-focus/id1532875441",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        },
+        {
+          "url": "https://play.google.com/store/apps/details?id=wtf.riedel.onesec",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "dynamicare-health",
+      "name": "DynamiCare Health",
+      "domain": "dynamicarehealth.com",
+      "industry": "behavioral-health",
+      "tier": 1,
+      "why_tracked": "行为验证 → 强化。",
+      "topic_ids": [
+        "tracking",
+        "action-plan",
+        "follow-up",
+        "expert-service"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.dynamicarehealth.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://www.dynamicarehealth.com/info",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://www.dynamicarehealth.com/download",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "paicoach",
+      "name": "PaiCoach",
+      "domain": "link.springer.com",
+      "industry": "research-prototype",
+      "tier": 1,
+      "why_tracked": "视频行为 → AI → 人工复核；product_status=research/prototype，不作为成熟商业 App 描述。",
+      "topic_ids": [
+        "tracking",
+        "reflection",
+        "expert-service"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42726183/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "asd-super-agent",
+      "name": "ASD Super Agent",
+      "domain": "science.hkust.edu.hk",
+      "industry": "research-prototype",
+      "tier": 1,
+      "why_tracked": "多模态 Evidence + 动态画像；product_status=research/test platform，不作为公开运营商业 Web 产品描述。",
+      "topic_ids": [
+        "assessment",
+        "diagnosis",
+        "tracking",
+        "action-plan"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://science.hkust.edu.hk/news/hkust-develops-asias-first-ai-powered-asd-super-agent-one-stop-autism-support",
+          "source_type": "static",
+          "signal_hint": "press_release"
+        }
+      ]
+    },
+    {
+      "id": "guji",
+      "name": "谷积",
+      "domain": "apps.apple.com",
+      "industry": "parenting-simulation",
+      "tier": 1,
+      "why_tracked": "Intervention 前模拟预演。",
+      "topic_ids": [
+        "action-plan",
+        "reflection"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://apps.apple.com/cn/app/%E8%B0%B7%E7%A7%AF%E5%85%BB%E8%82%B2%E6%A8%A1%E6%8B%9F/id6754871044",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "zizai-mental-health-ai",
+      "name": "“自在”心理疏导大模型",
+      "domain": "people.com.cn",
+      "industry": "institutional-mental-health-ai",
+      "tier": 1,
+      "why_tracked": "家庭 / 学校 / 专业转介；国家智慧教育平台 + 人民网+ App 内入口，非独立 App。公开第一方网页在 collector 中存在持续 TLS 证书不匹配，因此当前自动监控入口留空，以 Manual Research Queue 为持续研究路径。",
+      "topic_ids": [
+        "ai-conversation",
+        "assessment",
+        "expert-service",
+        "family-collaboration"
+      ],
+      "tracked_urls": []
+    },
+    {
+      "id": "yangguang-duoduo",
+      "name": "阳光朵朵 / 花都案例",
+      "domain": "cares.situdata.com",
+      "industry": "institutional-mental-health",
+      "tier": 1,
+      "why_tracked": "分级心理服务；机构部署型系统 + 专用实体/虚拟终端 + 后台体系。",
+      "topic_ids": [
+        "assessment",
+        "expert-service",
+        "follow-up",
+        "report"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://cares.situdata.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "xiaodu-ai-care",
+      "name": "小度 AI 看护 / 家庭智能体",
+      "domain": "xiaodu.jd.com",
+      "industry": "family-ai-hardware",
+      "tier": 1,
+      "why_tracked": "Ambient Evidence；智能硬件 + 小度 App + 微信触达，关键家庭交互需要人工研究。",
+      "topic_ids": [
+        "tracking",
+        "report",
+        "family-collaboration"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://xiaodu.jd.com/",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "brightline",
+      "name": "Brightline",
+      "domain": "brightline.com",
+      "industry": "pediatric-mental-health",
+      "tier": 1,
+      "why_tracked": "Evaluation → Care → Closure。",
+      "topic_ids": [
+        "assessment",
+        "expert-service",
+        "follow-up"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.brightline.com/what-we-offer/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://www.brightline.com/learning-hub/faqs/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://apps.apple.com/us/app/brightline-mental-health/id1609464006",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "good-inside",
+      "name": "Good Inside",
+      "domain": "goodinside.com",
+      "industry": "parenting",
+      "tier": 1,
+      "why_tracked": "AI → 内容 → 社群 → 真人。",
+      "topic_ids": [
+        "ai-conversation",
+        "action-plan",
+        "expert-service",
+        "family-collaboration"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.goodinside.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://apps.apple.com/us/app/good-inside-parenting/id6463803046",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "mightier",
+      "name": "Mightier",
+      "domain": "mightier.com",
+      "industry": "pediatric-digital-therapeutics",
+      "tier": 1,
+      "why_tracked": "产品直接训练能力。",
+      "topic_ids": [
+        "child-participation",
+        "tracking",
+        "action-plan"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.mightier.com/how-it-works/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://www.mightier.com/experience/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://www.mightier.com/faqs/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "daily-growth",
+      "name": "Daily Growth",
+      "domain": "pediatrics.jmir.org",
+      "industry": "research-prototype",
+      "tier": 1,
+      "why_tracked": "情境即时微干预；product_status=research/prototype，研究型 App，当前不作为成熟大众商业产品描述。",
+      "topic_ids": [
+        "action-plan",
+        "tracking",
+        "follow-up"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://pediatrics.jmir.org/2026/1/e87917",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42735383/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://doi.org/10.1186/s40359-025-03018-y",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "lumi-nova",
+      "name": "Lumi Nova",
+      "domain": "bfb-labs.com",
+      "industry": "pediatric-digital-therapeutics",
+      "tier": 1,
+      "why_tracked": "CBT / 暴露训练产品化。",
+      "topic_ids": [
+        "child-participation",
+        "action-plan",
+        "tracking"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.bfb-labs.com/lumi-nova-instructions-for-use",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "kinspire",
+      "name": "Kinspire / Precision Parenting",
+      "domain": "kinspirehealth.com",
+      "industry": "parenting-ai",
+      "tier": 1,
+      "why_tracked": "Living Family Profile；current identity=Precision Parenting（iOS/iPadOS）；旧 Android Kinspire 服务不与新版产品合并为同一代。",
+      "topic_ids": [
+        "assessment",
+        "diagnosis",
+        "action-plan",
+        "tracking"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.kinspirehealth.com/precision-parenting",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "neurture",
+      "name": "Neurture Studio",
+      "domain": "neurture.app",
+      "industry": "family-care-saas",
+      "tier": 1,
+      "why_tracked": "家庭与专业共享同一 Case。",
+      "topic_ids": [
+        "family-collaboration",
+        "expert-service",
+        "tracking",
+        "report"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://neurture.app/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://neurture.app/pricing",
+          "source_type": "static",
+          "signal_hint": "pricing_change"
+        },
+        {
+          "url": "https://neurture.app/about",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "understanding-zoe",
+      "name": "Understanding Zoe",
+      "domain": "understandingzoe.com",
+      "industry": "family-ai",
+      "tier": 1,
+      "why_tracked": "Family Second Brain。",
+      "topic_ids": [
+        "ai-conversation",
+        "family-collaboration",
+        "tracking",
+        "report"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://understandingzoe.com/download",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "mindler-sandbox",
+      "name": "Mindler / The Sandbox",
+      "domain": "thesandbox.mindler.co.uk",
+      "industry": "digital-mental-health",
+      "tier": 1,
+      "why_tracked": "Stepped Care；The Sandbox Web 与 Mindler 移动服务作为同一体系持续跟踪。",
+      "topic_ids": [
+        "assessment",
+        "expert-service",
+        "follow-up"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://thesandbox.mindler.co.uk/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://thesandbox.mindler.co.uk/aboutus",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "sword-health",
+      "name": "Sword Health",
+      "domain": "sword.com",
+      "industry": "digital-health",
+      "tier": 1,
+      "why_tracked": "Continuous AI Care。",
+      "topic_ids": [
+        "tracking",
+        "action-plan",
+        "expert-service",
+        "follow-up"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://sword.com/newsroom",
+          "source_type": "static",
+          "signal_hint": "press_release"
+        },
+        {
+          "url": "https://sword.com/articles/what-is-digital-physical-therapy",
+          "source_type": "static",
+          "signal_hint": "blog_post"
+        },
+        {
+          "url": "https://sword.com/articles/thrive-digital-physical-therapy",
+          "source_type": "static",
+          "signal_hint": "blog_post"
+        }
+      ]
+    },
+    {
+      "id": "hinge-health",
+      "name": "Hinge Health",
+      "domain": "hingehealth.com",
+      "industry": "digital-health",
+      "tier": 1,
+      "why_tracked": "行为本身持续产生 Evidence；核心产品为 iOS + Android，Web 主要为入组/问卷，不描述成完整 Web 产品。",
+      "topic_ids": [
+        "tracking",
+        "action-plan",
+        "expert-service"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.hingehealth.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "pelago",
+      "name": "Pelago",
+      "domain": "pelagohealth.com",
+      "industry": "digital-behavioral-health",
+      "tier": 1,
+      "why_tracked": "动态 Care Level；核心产品为 iOS + Android，Web 主要是注册/资格入口。",
+      "topic_ids": [
+        "assessment",
+        "action-plan",
+        "expert-service",
+        "follow-up"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.pelagohealth.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://www.pelagohealth.com/individuals/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://www.pelagohealth.com/clinical-expertise/substance-use-disorders/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "luca",
+      "name": "LUCA",
+      "domain": "luca.ai",
+      "industry": "education-ai",
+      "tier": 1,
+      "why_tracked": "Continuous Assessment。",
+      "topic_ids": [
+        "assessment",
+        "tracking",
+        "action-plan",
+        "report"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://luca.ai/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://luca.ai/our-technology/science-of-reading-alignment",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://luca.ai/terms",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "understood",
+      "name": "Understood",
+      "domain": "understood.org",
+      "industry": "learning-differences",
+      "tier": 1,
+      "why_tracked": "Screen transition → BPT。",
+      "topic_ids": [
+        "problem-discovery",
+        "tracking",
+        "action-plan"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.understood.org/en/app",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "emora",
+      "name": "EMORA",
+      "domain": "xhlxai.cn",
+      "industry": "research-prototype-hardware",
+      "tier": 1,
+      "why_tracked": "预测冲突前干预；product_status=beta/prototype，实体感知硬件 + 家长手表端 + 手机 App / 原型端。",
+      "topic_ids": [
+        "tracking",
+        "action-plan",
+        "family-collaboration"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.xhlxai.cn/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "functional-parenting-coach",
+      "name": "Functional Parenting Coach",
+      "domain": "apps.apple.com",
+      "industry": "parenting",
+      "tier": 1,
+      "why_tracked": "ABC → 行为功能 → 方案；iOS/iPadOS 已确认，Android 状态未确认，不在配置中宣称。",
+      "topic_ids": [
+        "problem-discovery",
+        "diagnosis",
+        "action-plan",
+        "tracking"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://apps.apple.com/us/app/functional-parenting-coach/id6791317215",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "zheli-zhihuijia",
+      "name": "浙里智慧家",
+      "domain": "web.91heal.com",
+      "industry": "public-family-service",
+      "tier": 2,
+      "why_tracked": "多角色 + 公共服务协同；当前公开入口为微信小程序家庭端 + Web 咨询/管理端，官网显示原生 Android/iOS 仍在规划/开发。",
+      "topic_ids": [
+        "family-collaboration",
+        "expert-service",
+        "ai-conversation"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://web.91heal.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "manatee",
+      "name": "Manatee",
+      "domain": "getmanatee.com",
+      "industry": "family-mental-health",
+      "tier": 2,
+      "why_tracked": "日常执行进入 Case。",
+      "topic_ids": [
+        "tracking",
+        "family-collaboration",
+        "expert-service",
+        "follow-up"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.getmanatee.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://www.getmanatee.com/app",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        },
+        {
+          "url": "https://www.getmanatee.com/care",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://apps.apple.com/us/app/manatee-family-mental-health/id1439499732",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "huckleberry",
+      "name": "Huckleberry",
+      "domain": "huckleberrycare.com",
+      "industry": "parenting",
+      "tier": 2,
+      "why_tracked": "Observe → Predict → Adapt。",
+      "topic_ids": [
+        "tracking",
+        "assessment",
+        "action-plan"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://apps.apple.com/us/app/huckleberry-baby-tracker/id1169136078",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        },
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.huckleberry_labs.app",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "lumi-family",
+      "name": "Lumi",
+      "domain": "withlumi.ai",
+      "industry": "family-ai",
+      "tier": 2,
+      "why_tracked": "Family Model → Check-in → 改 Plan；product_status=private beta。",
+      "topic_ids": [
+        "family-collaboration",
+        "tracking",
+        "action-plan"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.withlumi.ai/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://www.withlumi.ai/trust",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "bridges-engage",
+      "name": "BRIDGES Engage",
+      "domain": "neuroai.ca",
+      "industry": "family-care-platform",
+      "tier": 2,
+      "why_tracked": "家庭与专业 continuity。",
+      "topic_ids": [
+        "family-collaboration",
+        "expert-service",
+        "follow-up",
+        "tracking"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://neuroai.ca/families/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.neuroai.bridges",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "attune",
+      "name": "Attune",
+      "domain": "withattune.app",
+      "industry": "parenting-ai",
+      "tier": 2,
+      "why_tracked": "真实互动成为 Evidence。",
+      "topic_ids": [
+        "tracking",
+        "reflection",
+        "action-plan"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.withattune.app/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://apps.apple.com/us/app/attune-the-parenting-app/id6759914710",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        },
+        {
+          "url": "https://play.google.com/store/apps/details?id=com.withattune.app",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "luming-zhiyin",
+      "name": "鹿鸣知音",
+      "domain": "apps.apple.com",
+      "industry": "parenting-ai",
+      "tier": 2,
+      "why_tracked": "对话 → 分析 → 周复盘。",
+      "topic_ids": [
+        "tracking",
+        "reflection",
+        "report"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://apps.apple.com/cn/app/%E9%B9%BF%E9%B8%A3%E7%9F%A5%E9%9F%B3/id6760617387",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "qinbaobao",
+      "name": "亲宝宝",
+      "domain": "qinbaobao.com",
+      "industry": "parenting",
+      "tier": 2,
+      "why_tracked": "家庭长期数据与硬件。",
+      "topic_ids": [
+        "tracking",
+        "family-collaboration",
+        "ai-conversation"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.qinbaobao.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://www.qinbaobao.com/about",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://apps.apple.com/cn/app/%E4%BA%B2%E5%AE%9D%E5%AE%9D-%E8%AE%B0%E5%BD%95%E6%88%90%E9%95%BF-%E7%A7%91%E5%AD%A6%E8%82%B2%E5%84%BF/id672984826",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "shiguangji",
+      "name": "拾光记",
+      "domain": "apps.apple.com",
+      "industry": "family-ai",
+      "tier": 2,
+      "why_tracked": "无感家庭互动采集；iOS 已确认，公开 Android 状态未确认。",
+      "topic_ids": [
+        "tracking",
+        "reflection",
+        "report"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://apps.apple.com/cn/app/%E6%8B%BE%E5%85%89%E8%AE%B0-%E6%9C%9D%E8%AF%9D%E5%A4%95%E6%8B%BE-ai%E6%8A%A4%E6%88%90%E9%95%BF/id6752014863?platform=watch",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "zhiyu-zhushou",
+      "name": "智育助手",
+      "domain": "apps.apple.com",
+      "industry": "parenting-ai",
+      "tier": 2,
+      "why_tracked": "Intervention 中继续理解用户。",
+      "topic_ids": [
+        "tracking",
+        "action-plan",
+        "ai-conversation"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://apps.apple.com/cn/app/%E6%99%BA%E8%82%B2%E5%8A%A9%E6%89%8B/id6755434361",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "joon",
+      "name": "Joon",
+      "domain": "joonapp.io",
+      "industry": "child-behavior",
+      "tier": 2,
+      "why_tracked": "产品承担执行动力。",
+      "topic_ids": [
+        "child-participation",
+        "action-plan",
+        "tracking"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.joonapp.io/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://www.joonapp.io/user-manual/getting-your-kids-started-with-joon",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "dragonlock",
+      "name": "Dragonlock",
+      "domain": "dragonlock.app",
+      "industry": "family-screen-time",
+      "tier": 2,
+      "why_tracked": "现实行为 → 数字权限；iOS/iPadOS，明确不支持 Android。",
+      "topic_ids": [
+        "child-participation",
+        "action-plan",
+        "tracking"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://dragonlock.app/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "grogo",
+      "name": "Grogo",
+      "domain": "grogo.com",
+      "industry": "family-screen-time",
+      "tier": 2,
+      "why_tracked": "改善屏幕使用质量；iOS/iPadOS + Android 手机，Android 平板当前不支持。",
+      "topic_ids": [
+        "child-participation",
+        "action-plan",
+        "tracking"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://grogo.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://grogo.com/support",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://apps.apple.com/us/app/grogo-healthier-screen-time/id6736766860",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "parentup",
+      "name": "ParentUp",
+      "domain": "parentup.co",
+      "industry": "parenting",
+      "tier": 2,
+      "why_tracked": "What Works Playbook。",
+      "topic_ids": [
+        "action-plan",
+        "follow-up",
+        "reflection"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://parentup.co/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "includedvision",
+      "name": "IncludedVision",
+      "domain": "includedvision.com",
+      "industry": "family-care-ai",
+      "tier": 2,
+      "why_tracked": "Parent-reviewed Evidence；product_status=alpha/early access。",
+      "topic_ids": [
+        "tracking",
+        "report",
+        "family-collaboration",
+        "expert-service"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://includedvision.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "ditri",
+      "name": "Ditri",
+      "domain": "ditri.ai",
+      "industry": "family-care-os",
+      "tier": 2,
+      "why_tracked": "Family Care OS；Web / PWA，可安装到移动端与 desktop。",
+      "topic_ids": [
+        "tracking",
+        "family-collaboration",
+        "report"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://ditri.ai/",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "unpluq",
+      "name": "Unpluq",
+      "domain": "unpluq.com",
+      "industry": "digital-wellbeing",
+      "tier": 2,
+      "why_tracked": "Physical Friction。",
+      "topic_ids": [
+        "action-plan",
+        "tracking"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.unpluq.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://www.unpluq.com/pages/faq",
+          "source_type": "static",
+          "signal_hint": "other"
+        }
+      ]
+    },
+    {
+      "id": "forfeit",
+      "name": "Forfeit",
+      "domain": "forfeit.app",
+      "industry": "behavior-change",
+      "tier": 2,
+      "why_tracked": "Precommitment + Evidence；跟踪 forfeit.app 当前官方产品，不使用同名第三方商店克隆。",
+      "topic_ids": [
+        "action-plan",
+        "tracking",
+        "follow-up"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://www.forfeit.app/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://play.google.com/store/apps/details?id=app.forfeit.forfeit",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "huawei-kids-watch",
+      "name": "华为儿童手表 / 儿童守护体系",
+      "domain": "consumer.huawei.com",
+      "industry": "family-hardware",
+      "tier": 2,
+      "why_tracked": "Device Evidence + OS 规则。",
+      "topic_ids": [
+        "tracking",
+        "family-collaboration",
+        "child-participation"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://consumer.huawei.com/cn/support/kids-watch/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://consumer.huawei.com/cn/wearables/kids-watch-5-pro/",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        },
+        {
+          "url": "https://apps.apple.com/cn/app/%E6%99%BA%E8%83%BD%E5%85%B3%E6%80%80/id1383652311",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "mango-parent",
+      "name": "Mango Parent",
+      "domain": "parentosapp.com",
+      "industry": "parenting-ai",
+      "tier": 2,
+      "why_tracked": "建模并训练家长；当前官方落地页使用 parentosapp.com，官网主要宣传/支持，不描述成完整 Web 产品。",
+      "topic_ids": [
+        "reflection",
+        "action-plan",
+        "tracking"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://parentosapp.com/",
+          "source_type": "static",
+          "signal_hint": "other"
+        },
+        {
+          "url": "https://apps.apple.com/us/app/mango-parent-calm-parenting/id6792188145",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    },
+    {
+      "id": "timenest",
+      "name": "TimeNest",
+      "domain": "apps.apple.com",
+      "industry": "family-screen-time",
+      "tier": 2,
+      "why_tracked": "家庭 Screen-time 多机制组合；iOS/iPadOS + Parent Web 管理端已知，Android 当前公开状态未确认。",
+      "topic_ids": [
+        "child-participation",
+        "tracking",
+        "family-collaboration"
+      ],
+      "tracked_urls": [
+        {
+          "url": "https://apps.apple.com/es/app/timenest-family-screen-time/id6831335478",
+          "source_type": "static",
+          "signal_hint": "product_launch"
+        }
+      ]
+    }
+  ]
+}

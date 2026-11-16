@@ -29,9 +29,9 @@ radar status
 detected change. No model is called. (GitHub Actions runs these non-AI steps
 only and must never fail for a missing model key.)
 
-If `config/competitors.yaml` is `competitors: []` (the V1 default), there may be
-no pending files — that is expected; the real ~55-competitor list has not been
-supplied. Never invent competitors to create work.
+The competitor authority is now populated with the confirmed 55-object onboarding
+set. An empty pending queue can still be valid when no new deterministic changes
+are detected; never invent competitors or changes to create work.
 
 ### 2. Invoke the skill (human-triggered, in Antigravity)
 

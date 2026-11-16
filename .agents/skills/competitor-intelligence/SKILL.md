@@ -59,7 +59,7 @@ hardcoded frontend list, or a localStorage overlay.
 | JSON Schemas | `data/intelligence/schema/*.schema.json` | The validation contract for outputs. |
 | Raw evidence | upstream snapshots (`raw.raw_pages` in DuckDB) + `data/raw/*.parquet` | Ground truth for what changed. |
 | Manual evidence | `evidence/manual/<evidence_id>/metadata.json` + asset files in the same folder | Supplementary, read-only input. |
-| Competitor authority | `config/competitors.yaml` | The only competitor registry (intentionally `competitors: []` in V1). |
+| Competitor authority | `config/competitors.yaml` | The only competitor registry; populated with the confirmed 55-object onboarding set. |
 | Topic taxonomy | `config/topics.yaml` | The only allowed `topic_ids[]`. |
 | Xiaoshuyin context | `context/xiaoshuyin.md` | Relevance guardrails (requirement 10). |
 | Prior intelligence | `data/intelligence/records/` | Only when needed (duplicate check, consistency). |
@@ -167,10 +167,10 @@ manual-evidence id or snapshot id), plus `url`, `snapshot_ref`, and
 ### 13. NEVER fabricate screenshots, sources, features, or competitor facts
 
 If it is not in the evidence, do not state it. No invented competitor names,
-URLs, quotes, metrics, screenshots, or feature claims. **Do not invent the ~55
-competitors** — `config/competitors.yaml` is authoritative and intentionally
-empty in V1; the sample fixture is tests/demo only. Never fabricate evidence to
-fill a gap.
+URLs, quotes, metrics, screenshots, or feature claims. The confirmed 55-object
+set in `config/competitors.yaml` is authoritative; do not add, remove, re-rank,
+or substitute competitors without explicit human authority. The sample fixture
+is tests/demo only. Never fabricate evidence to fill a gap.
 
 ### 14. When evidence is insufficient, lower Confidence and create a manual research request
 

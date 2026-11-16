@@ -42,7 +42,7 @@ The Antigravity agent may read **only** these authoritative inputs:
 | JSON Schemas | `data/intelligence/schema/*.schema.json` | The validation contract for outputs. |
 | Raw evidence | upstream snapshots (`raw.raw_pages` in DuckDB) and `data/raw/*.parquet` | Ground truth for what changed. |
 | Manual evidence | `evidence/manual/<evidence_id>/metadata.json` + asset files in the same folder | Supplementary human-captured evidence. |
-| Competitor authority | `config/competitors.yaml` | The only competitor registry (intentionally empty in V1). |
+| Competitor authority | `config/competitors.yaml` | The only competitor registry; 55 onboarded objects (34 Tier 1 / 21 Tier 2). |
 | Topic taxonomy | `config/topics.yaml` | The only allowed `topic_ids[]` (13 topics). |
 | Xiaoshuyin context | `context/xiaoshuyin.md` | Relevance guardrails. |
 | Prior intelligence | `data/intelligence/records/` | Only when needed (e.g. to avoid duplicate `change_id`, keep consistency). |

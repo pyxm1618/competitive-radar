@@ -13,7 +13,8 @@ create a manual research request (requirement 14).
 - [ ] Confirmed the evidence actually supports the detected change (no inference
       beyond what the evidence shows).
 - [ ] Checked `config/competitors.yaml` for the `competitor_id`; did **not**
-      invent a competitor (the V1 authority is intentionally empty).
+      invent, substitute, or silently mutate a competitor outside the confirmed
+      55-object authority.
 - [ ] Checked `data/intelligence/records/` for an existing record with the same
       `change_id` (one record per change_id; duplicates rejected).
 - [ ] Read `data/intelligence/schema/intelligence-record.schema.json` for the

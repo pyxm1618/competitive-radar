@@ -256,10 +256,24 @@ def run_collect(settings: Settings | None = None, path: Path | None = None) -> C
         )
         active_sources = active_source_pairs(cfg)
         processed = _processed_change_hashes(wh)
+
+        # Upstream compete intentionally treats the first snapshot for a URL as
+        # ChangeType.NEW. Radar keeps that compatibility at the detection layer,
+        # but its monitoring authority must treat the first successful snapshot
+        # as evidence baseline only. No second baseline registry is needed:
+        # prev_hash=None already proves this is the first observed snapshot.
+        baselines = [cand for cand in detected if cand.prev_hash is None]
+        if baselines:
+            log.info(
+                "established %d initial baseline snapshot(s); not persisting to raw.changes",
+                len(baselines),
+            )
+
         candidates = [
             cand
             for cand in detected
-            if is_active_source(active_sources, cand.competitor_id, cand.url)
+            if cand.prev_hash is not None
+            and is_active_source(active_sources, cand.competitor_id, cand.url)
             and (cand.url, cand.new_hash) not in processed
         ]
         if len(candidates) != len(detected):
