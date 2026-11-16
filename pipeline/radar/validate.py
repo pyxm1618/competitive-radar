@@ -174,14 +174,13 @@ def validate_intelligence(
         current_pending = pending_by_change.get(record.change_id)
         record_url = str(record.provenance.get("url") or "")
 
-        historical = False
-        if current_pending is None:
-            if record.competitor_id not in competitor_ids:
-                historical = True
-            elif record_url and not is_active_source(
-                active_sources, record.competitor_id, record_url
-            ):
-                historical = True
+        historical = current_pending is None and (
+            record.competitor_id not in competitor_ids
+            or (
+                bool(record_url)
+                and not is_active_source(active_sources, record.competitor_id, record_url)
+            )
+        )
 
         if historical:
             report.historical_records.append(record)

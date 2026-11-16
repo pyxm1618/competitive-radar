@@ -11,9 +11,9 @@ import pytest
 import yaml
 from pydantic import ValidationError
 
-import pipeline.radar.compile as radar_compile_module
-import pipeline.radar.manual as manual_module
 from pipeline.config import Settings, get_settings
+from pipeline.radar import compile as radar_compile_module
+from pipeline.radar import manual as manual_module
 from pipeline.radar.contracts import (
     IntelligenceRecord,
     ManualEvidence,
