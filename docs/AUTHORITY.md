@@ -13,7 +13,7 @@ This document is the unambiguous authority model. It complements
 
 | # | Concern | ONE authority | Exact path | Notes |
 |---|---|---|---|---|
-| 1 | Competitors | `config/competitors.yaml` | `config/competitors.yaml` | The **only** competitor registry. Intentionally `competitors: []` in V1 — the real ~55-competitor list has **not** been supplied. Never fabricate it. |
+| 1 | Competitors | `config/competitors.yaml` | `config/competitors.yaml` | The **only** competitor registry. Contains the confirmed 55-object onboarding set (34 Tier 1 / 21 Tier 2). Add/remove/substitute/re-rank only with explicit human authority. |
 | 2 | Topic taxonomy | `config/topics.yaml` | `config/topics.yaml` | 13 topics: `problem-discovery`, `assessment`, `diagnosis`, `ai-conversation`, `action-plan`, `family-collaboration`, `child-participation`, `tracking`, `follow-up`, `reflection`, `report`, `expert-service`, `monetization`. Intelligence `topic_ids[]` may only reference these. |
 | 3 | Raw evidence | upstream `raw.raw_pages` (DuckDB) + `data/raw/*.parquet` | `data/raw/*.parquet` / DuckDB `raw.raw_pages` | The **only** raw-evidence store. No second raw-evidence database. Manual evidence lives separately (below) and is read-only input. |
 | 4 | Change detection | deterministic comparison between collected snapshots | upstream `pipeline/detect/change.py` | The **only** change authority. **AI cannot decide whether a change happened.** |
