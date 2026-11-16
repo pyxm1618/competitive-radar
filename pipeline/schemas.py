@@ -116,6 +116,14 @@ class CompetitorsFile(BaseModel):
     defaults: CollectionDefaults = Field(default_factory=CollectionDefaults)
     competitors: list[CompetitorConfig] = Field(default_factory=list)
 
+    @field_validator("competitors")
+    @classmethod
+    def _unique_ids(cls, value: list[CompetitorConfig]) -> list[CompetitorConfig]:
+        ids = [c.id for c in value]
+        if len(ids) != len(set(ids)):
+            raise ValueError("duplicate competitor ids in config/competitors.yaml")
+        return value
+
 
 # --------------------------------------------------------------------------- #
 # Storage row models.

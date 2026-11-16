@@ -64,7 +64,12 @@ from pipeline.radar.paths import (
     WEEKLY_DIR,
     ensure_intelligence_dirs,
 )
-from pipeline.radar.pending import load_competitors_from, load_pending
+from pipeline.radar.pending import (
+    active_source_pairs,
+    is_active_source,
+    load_competitors_from,
+    load_pending,
+)
 from pipeline.radar.validate import load_topics, validate_intelligence
 from pipeline.radar.weekly import (
     build_weekly_pulse,
@@ -331,11 +336,27 @@ def compile_radar(
 
     cfg = load_competitors_from(competitors_path)
     topics = load_topics(TOPICS_PATH)
-    pending = load_pending(pending_dir)
-    records = report.records
-    manual_items = load_manual_evidence(manual_root)
-    research_items = load_research_requests(research_dir)
+    active_sources = active_source_pairs(cfg)
+    pending = [
+        item
+        for item in load_pending(pending_dir)
+        if is_active_source(active_sources, item.competitor_id, item.url)
+    ]
     pending_by_change = {p.change_id: p for p in pending}
+    records = report.records
+    active_competitor_ids = {c.id for c in cfg.competitors}
+    manual_items = [
+        item
+        for item in load_manual_evidence(manual_root)
+        if item.competitor_id in active_competitor_ids
+        and (item.related_change_id is None or item.related_change_id in pending_by_change)
+    ]
+    research_items = [
+        item
+        for item in load_research_requests(research_dir)
+        if (item.competitor_id is None or item.competitor_id in active_competitor_ids)
+        and (item.related_change_id is None or item.related_change_id in pending_by_change)
+    ]
 
     verified = (
         set()

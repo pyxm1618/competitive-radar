@@ -87,7 +87,9 @@ def prepare() -> None:
     console.print(
         f"[green]✓ prepare[/] changes_read={result.changes_read} created={result.created} "
         f"unchanged={result.unchanged} updated={result.updated} "
-        f"skipped_missing_evidence={result.skipped_missing_evidence}"
+        f"skipped_missing_evidence={result.skipped_missing_evidence} "
+        f"ignored_inactive={result.ignored_inactive} "
+        f"removed_inactive={result.removed_inactive}"
     )
     console.print(f"[dim]Queue: {PENDING_DIR.relative_to(REPO_ROOT)}[/]")
 

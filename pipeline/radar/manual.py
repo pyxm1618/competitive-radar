@@ -36,6 +36,22 @@ log = get_logger("radar.manual")
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg"}
 
 
+def _contained_asset_path(root: Path, name: str) -> Path:
+    """Resolve a manual asset while preventing absolute/traversal/symlink escape."""
+    relative = Path(name)
+    if relative.is_absolute() or ".." in relative.parts:
+        raise ValueError(f"manual evidence asset must stay inside its evidence folder: {name}")
+    resolved_root = root.resolve()
+    resolved = (root / relative).resolve()
+    try:
+        resolved.relative_to(resolved_root)
+    except ValueError as exc:
+        raise ValueError(
+            f"manual evidence asset resolves outside its evidence folder: {name}"
+        ) from exc
+    return resolved
+
+
 def load_manual_evidence(root: Path | None = None) -> list[ManualEvidence]:
     """Load every metadata.json under the manual evidence directory."""
     directory = root or MANUAL_EVIDENCE_DIR
@@ -44,7 +60,11 @@ def load_manual_evidence(root: Path | None = None) -> list[ManualEvidence]:
     items: list[ManualEvidence] = []
     for meta in sorted(directory.glob("*/metadata.json")):
         item = ManualEvidence.model_validate_json(meta.read_text(encoding="utf-8"))
-        missing = [f for f in item.files if not (meta.parent / f).is_file()]
+        missing = [
+            name
+            for name in item.files
+            if not _contained_asset_path(meta.parent, name).is_file()
+        ]
         if missing:
             log.warning("%s references missing asset(s): %s", item.evidence_id, ", ".join(missing))
             item = item.model_copy(update={"verification_state": VerificationState.MISSING})
@@ -84,9 +104,11 @@ def copy_manual_assets(items: list[ManualEvidence], root: Path | None = None) ->
         dst = PUBLIC_EVIDENCE_DIR / item.evidence_id
         dst.mkdir(parents=True, exist_ok=True)
         for name in item.files:
-            origin = src / name
+            origin = _contained_asset_path(src, name)
+            destination = _contained_asset_path(dst, name)
             if origin.is_file():
-                shutil.copy2(origin, dst / name)
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(origin, destination)
                 copied += 1
     return copied
 

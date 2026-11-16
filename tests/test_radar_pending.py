@@ -39,11 +39,7 @@ def _settings(tmp_path: Path, monkeypatch) -> Settings:
 
 
 def _config(tmp_path: Path) -> Path:
-    """A test-only authority with a competitor but ZERO tracked URLs.
-
-    Zero URLs means `collect_all` performs no network I/O; the snapshots below
-    are inserted directly to exercise diff + persistence deterministically.
-    """
+    """A test-only authority with the seeded URL declared active."""
     path = tmp_path / "competitors.yaml"
     path.write_text(
         yaml.safe_dump(
@@ -54,7 +50,13 @@ def _config(tmp_path: Path) -> Path:
                         "name": "Sample Alpha (test)",
                         "domain": "alpha.example.com",
                         "tier": 1,
-                        "tracked_urls": [],
+                        "tracked_urls": [
+                            {
+                                "url": URL,
+                                "source_type": "static",
+                                "signal_hint": "other",
+                            }
+                        ],
                     }
                 ]
             }
@@ -101,7 +103,11 @@ def test_collect_detect_prepare_end_to_end(tmp_path: Path, monkeypatch) -> None:
     old_hash, new_hash = _seed_snapshots(wh)
     wh.close()
 
-    # `radar collect` reuses upstream collect_all + the upstream diff engine.
+    # Avoid network I/O; this test targets Radar's reuse of the upstream diff.
+    monkeypatch.setattr(
+        "pipeline.radar.pending.collect_all",
+        lambda _settings: {"urls": 0, "snapshots": 0, "failed": 0},
+    )
     result = run_collect(settings, config)
     assert result.competitors == 1
     assert result.urls == 0  # no network in this test

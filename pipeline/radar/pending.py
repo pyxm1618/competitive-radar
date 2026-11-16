@@ -67,6 +67,8 @@ class PrepareResult:
     unchanged: int = 0
     updated: int = 0
     skipped_missing_evidence: int = 0
+    ignored_inactive: int = 0
+    removed_inactive: int = 0
     change_ids: list[str] | None = None
 
 
@@ -76,6 +78,42 @@ class PrepareResult:
 def load_competitors_from(path: Path | None = None) -> CompetitorsFile:
     """Load the competitor authority (or the clearly-labelled sample fixture)."""
     return load_competitors(path or COMPETITORS_PATH)
+
+
+def active_source_pairs(cfg: CompetitorsFile) -> set[tuple[str, str]]:
+    """Canonical (competitor_id, url) pairs currently authorized by config."""
+    return {
+        (comp.id, str(tracked.url).rstrip("/"))
+        for comp in cfg.competitors
+        for tracked in comp.tracked_urls
+    }
+
+
+def is_active_source(
+    active_sources: set[tuple[str, str]],
+    competitor_id: str,
+    url: str,
+) -> bool:
+    """Return whether a raw/change row still belongs to current monitoring."""
+    return (competitor_id, url.rstrip("/")) in active_sources
+
+
+def _processed_change_hashes(wh: Warehouse) -> set[tuple[str, str]]:
+    """Radar-accepted (url, new_hash) pairs.
+
+    raw.changes is the Radar V1 deterministic change authority. Once a content
+    hash has been accepted there, re-collection of the same hash must not
+    recreate the change just because upstream raw.signals is intentionally
+    unused by the Antigravity workflow.
+    """
+    rows = wh.query(
+        """
+        SELECT url, new_hash
+        FROM raw.changes
+        WHERE url IS NOT NULL AND new_hash IS NOT NULL
+        """
+    )
+    return {(str(row[0]), str(row[1])) for row in rows}
 
 
 def build_hints(cfg: CompetitorsFile) -> dict[str, SignalType | None]:
@@ -213,9 +251,23 @@ def run_collect(settings: Settings | None = None, path: Path | None = None) -> C
     )
     try:
         embedder = get_embedder(s)
-        candidates: list[ChangeCandidate] = detect_changes(
+        detected: list[ChangeCandidate] = detect_changes(
             wh, embedder, s.diff_similarity_threshold, build_hints(cfg)
         )
+        active_sources = active_source_pairs(cfg)
+        processed = _processed_change_hashes(wh)
+        candidates = [
+            cand
+            for cand in detected
+            if is_active_source(active_sources, cand.competitor_id, cand.url)
+            and (cand.url, cand.new_hash) not in processed
+        ]
+        if len(candidates) != len(detected):
+            log.info(
+                "radar accepted %d/%d candidate(s) after active-source and processed-state filtering",
+                len(candidates),
+                len(detected),
+            )
         snaps = _snapshot_rows(wh)
         for cand in candidates:
             after_row = snaps.get((cand.url, cand.new_hash))
@@ -308,6 +360,7 @@ def run_prepare(
     target.mkdir(parents=True, exist_ok=True)
     cfg = load_competitors_from(path)
     types = source_type_map(cfg)
+    active_sources = active_source_pairs(cfg)
 
     wh = Warehouse.from_settings(s, read_only=False)
     result = PrepareResult(change_ids=[])
@@ -320,8 +373,21 @@ def run_prepare(
             """
         )
         snaps = _snapshot_rows(wh)
-        result.changes_read = len(rows)
-        for row in rows:
+        active_rows = [
+            row
+            for row in rows
+            if is_active_source(active_sources, str(row[1]), str(row[2]))
+        ]
+        result.changes_read = len(active_rows)
+        result.ignored_inactive = len(rows) - len(active_rows)
+
+        active_change_ids = {str(row[0]) for row in active_rows}
+        for stale in sorted(target.glob("*.json")):
+            if stale.stem not in active_change_ids:
+                stale.unlink()
+                result.removed_inactive += 1
+
+        for row in active_rows:
             item = build_pending_change(row, snaps, types)
             if item is None:
                 result.skipped_missing_evidence += 1
@@ -347,11 +413,14 @@ def run_prepare(
             if result.change_ids is not None:
                 result.change_ids.append(item.change_id)
         log.info(
-            "pending queue: %d created, %d unchanged, %d updated, %d skipped",
+            "pending queue: %d created, %d unchanged, %d updated, %d skipped, "
+            "%d inactive ignored, %d inactive files removed",
             result.created,
             result.unchanged,
             result.updated,
             result.skipped_missing_evidence,
+            result.ignored_inactive,
+            result.removed_inactive,
         )
         return result
     finally:
@@ -373,8 +442,10 @@ __all__ = [
     "EXAMPLE_COMPETITORS_PATH",
     "CollectResult",
     "PrepareResult",
+    "active_source_pairs",
     "build_hints",
     "build_pending_change",
+    "is_active_source",
     "load_competitors_from",
     "load_pending",
     "run_collect",
