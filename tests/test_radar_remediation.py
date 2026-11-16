@@ -9,8 +9,6 @@ from pathlib import Path
 
 import pytest
 import yaml
-from pydantic import ValidationError
-
 from pipeline.config import Settings, get_settings
 from pipeline.radar import compile as radar_compile_module
 from pipeline.radar import manual as manual_module
@@ -32,6 +30,7 @@ from pipeline.radar.pending import load_pending, run_collect, run_prepare
 from pipeline.radar.validate import validate_intelligence
 from pipeline.schemas import CompetitorsFile, RawPage, SourceType
 from pipeline.storage.duckdb_store import Warehouse
+from pydantic import ValidationError
 
 URL_A = "https://alpha.example.com/home"
 URL_A2 = "https://alpha.example.com/changelog"
