@@ -6,8 +6,8 @@ are short, verifiable rules; see `docs/AUTHORITY.md` for the full model.
 ## The rules
 
 1. **Single authority paths — never duplicate them.**
-   - Competitors: `config/competitors.yaml` (the only registry; intentionally
-     `competitors: []` in V1).
+   - Competitors: `config/competitors.yaml` (the only registry; currently
+     populated with the confirmed 55-object onboarding set).
    - Topics: `config/topics.yaml` (13 topics, the only taxonomy).
    - Raw evidence: upstream `raw.raw_pages` (DuckDB) + `data/raw/*.parquet`
      (no second raw-evidence database).
@@ -21,10 +21,11 @@ are short, verifiable rules; see `docs/AUTHORITY.md` for the full model.
    competitor registry, no second intelligence store, no localStorage CRUD
    as truth.
 
-2. **Never invent competitors.** The real ~55-competitor list has NOT been
-   supplied. Do not invent, scrape, or research competitors to populate
-   `config/competitors.yaml`. `config/examples/competitors.sample.yaml` is a
-   clearly-labelled sample for tests / demo only, not authority.
+2. **Never invent or silently mutate competitors.** The confirmed 55-object
+   onboarding set now lives in `config/competitors.yaml`. Add, remove, or
+   re-rank competitors only with explicit human authority.
+   `config/examples/competitors.sample.yaml` remains a clearly-labelled
+   tests/demo fixture only, never authority.
 
 3. **Never modify raw snapshots.** Do not write to `data/raw/`, `raw.raw_pages`,
    the DuckDB warehouse, `config/`, `web/`, `evidence/`, or
