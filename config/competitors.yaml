@@ -378,20 +378,14 @@
       "domain": "people.com.cn",
       "industry": "institutional-mental-health-ai",
       "tier": 1,
-      "why_tracked": "家庭 / 学校 / 专业转介；国家智慧教育平台、人民网及 App 内入口组成服务入口，非独立 App。",
+      "why_tracked": "家庭 / 学校 / 专业转介；国家智慧教育平台 + 人民网+ App 内入口，非独立 App。公开第一方网页在 collector 中存在持续 TLS 证书不匹配，因此当前自动监控入口留空，以 Manual Research Queue 为持续研究路径。",
       "topic_ids": [
         "ai-conversation",
         "assessment",
         "expert-service",
         "family-collaboration"
       ],
-      "tracked_urls": [
-        {
-          "url": "https://sklccc.cn/",
-          "source_type": "static",
-          "signal_hint": "press_release"
-        }
-      ]
+      "tracked_urls": []
     },
     {
       "id": "yangguang-duoduo",

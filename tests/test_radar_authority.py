@@ -4,6 +4,8 @@ no paid LLM API dependency, frontend read-only.
 
 from __future__ import annotations
 
+import json
+
 import yaml
 from pipeline.radar.contracts import (
     Confidence,
@@ -55,8 +57,12 @@ def test_competitor_authority_contains_real_onboarding_set() -> None:
     assert sum(c["tier"] == 2 for c in competitors) == 21
     ids = [c["id"] for c in competitors]
     assert len(ids) == len(set(ids))
-    assert all(c["tracked_urls"] for c in competitors)
-    assert sum(len(c["tracked_urls"]) for c in competitors) == 99
+    manual_ids = {
+        json.loads(path.read_text(encoding="utf-8"))["competitor_id"]
+        for path in (REPO_ROOT / "data" / "intelligence" / "research").glob("*.json")
+    }
+    assert all(c["tracked_urls"] or c["id"] in manual_ids for c in competitors)
+    assert sum(len(c["tracked_urls"]) for c in competitors) == 98
     header = COMPETITORS_PATH.read_text(encoding="utf-8")
     assert "AUTHORITY" in header
     assert "confirmed 55-object onboarding list" in header
