@@ -523,6 +523,7 @@ def test_compiler_excludes_retired_competitor_but_keeps_history_files(
     config = tmp_path / "competitors-no-gamma.yaml"
     config.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
     monkeypatch.setattr(radar_compile_module, "EXAMPLE_COMPETITORS_PATH", config)
+    monkeypatch.setattr(radar_compile_module, "REPO_ROOT", tmp_path)
 
     snapshot = radar_compile_module.compile_radar(demo=True, write=False)
     assert all(c.id != "sample-gamma" for c in snapshot.competitors)
@@ -542,6 +543,7 @@ def test_compiler_excludes_removed_tracked_url_but_keeps_other_sources(
     config = tmp_path / "competitors-no-changelog.yaml"
     config.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
     monkeypatch.setattr(radar_compile_module, "EXAMPLE_COMPETITORS_PATH", config)
+    monkeypatch.setattr(radar_compile_module, "REPO_ROOT", tmp_path)
 
     snapshot = radar_compile_module.compile_radar(demo=True, write=False)
     assert all(pair.url != URL_A2 for pair in snapshot.before_after)
