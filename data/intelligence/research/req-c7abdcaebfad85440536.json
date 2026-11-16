@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "request_id": "req-c7abdcaebfad85440536",
+  "competitor_id": "functional-parenting-coach",
+  "topic_ids": [
+    "problem-discovery",
+    "diagnosis",
+    "action-plan",
+    "tracking"
+  ],
+  "research_question": "Functional Parenting Coach 当前如何从 ABC 记录推断行为功能并生成方案？",
+  "why_needed": "App Store 可确认当前 iOS 产品，但 ABC→功能→方案的核心流程在 App 内。",
+  "suggested_steps": [
+    "完成首次 onboarding",
+    "记录一个 ABC 事件",
+    "记录行为功能分析与建议方案"
+  ],
+  "required_evidence": [
+    {
+      "label": "ABC 输入截图",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "行为功能分析截图",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "建议方案截图",
+      "required": true,
+      "satisfied": false
+    }
+  ],
+  "status": "open",
+  "created_at": "2026-11-16T06:38:00Z",
+  "created_by": "competitive-radar-onboarding",
+  "related_change_id": null,
+  "related_intelligence_id": null,
+  "notes": "Onboarding baseline request; do not bypass authentication, platform access controls, or device authorization."
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "request_id": "req-e87e549f09ca616660f3",
+  "competitor_id": "zhixin-huiyu",
+  "topic_ids": [
+    "problem-discovery",
+    "assessment",
+    "action-plan"
+  ],
+  "research_question": "微信小程序中的“问题理解 → 筛查 → 干预”当前完整流程是什么？",
+  "why_needed": "公开页面无法持续观察微信小程序内部交互，但该流程是 Tier 1 核心研究价值。",
+  "suggested_steps": [
+    "在微信中打开知心慧语小程序并记录当前入口",
+    "从首次问题输入走到筛查结果",
+    "记录干预建议、后续跟进与完成状态"
+  ],
+  "required_evidence": [
+    {
+      "label": "首次进入/问题输入截图",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "筛查过程与结果截图",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "干预建议与后续状态截图",
+      "required": true,
+      "satisfied": false
+    }
+  ],
+  "status": "open",
+  "created_at": "2026-11-16T06:38:00Z",
+  "created_by": "competitive-radar-onboarding",
+  "related_change_id": null,
+  "related_intelligence_id": null,
+  "notes": "Onboarding baseline request; do not bypass authentication, platform access controls, or device authorization."
+}

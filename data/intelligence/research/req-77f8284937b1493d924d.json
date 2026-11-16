@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "request_id": "req-77f8284937b1493d924d",
+  "competitor_id": "paicoach",
+  "topic_ids": [
+    "tracking",
+    "reflection",
+    "expert-service"
+  ],
+  "research_question": "PaiCoach 研究原型当前的视频行为采集、AI 分析和人工复核流程是什么？",
+  "why_needed": "论文可证明研究原型存在，但不能替代对当前可用原型交互与人工复核边界的观察。",
+  "suggested_steps": [
+    "获取研究团队公开演示或经授权的原型访问",
+    "记录视频输入与 AI 输出",
+    "确认人工复核在流程中的位置与权限"
+  ],
+  "required_evidence": [
+    {
+      "label": "原型/演示界面证据",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "AI 输出示例",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "人工复核流程证据",
+      "required": true,
+      "satisfied": false
+    }
+  ],
+  "status": "open",
+  "created_at": "2026-11-16T06:38:00Z",
+  "created_by": "competitive-radar-onboarding",
+  "related_change_id": null,
+  "related_intelligence_id": null,
+  "notes": "Onboarding baseline request; do not bypass authentication, platform access controls, or device authorization."
+}

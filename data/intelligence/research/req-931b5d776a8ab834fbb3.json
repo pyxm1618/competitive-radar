@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "request_id": "req-931b5d776a8ab834fbb3",
+  "competitor_id": "asd-super-agent",
+  "topic_ids": [
+    "assessment",
+    "diagnosis",
+    "tracking",
+    "action-plan"
+  ],
+  "research_question": "ASD Super Agent 当前多模态证据输入、动态画像与支持建议如何串联？",
+  "why_needed": "HKUST 官方页面确认平台，但公开页面不足以观察测试型平台的真实交互。",
+  "suggested_steps": [
+    "获取公开演示或经授权测试入口",
+    "记录手机视频等输入方式",
+    "记录动态画像与建议输出"
+  ],
+  "required_evidence": [
+    {
+      "label": "输入流程截图/演示",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "动态画像截图",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "建议/干预输出截图",
+      "required": true,
+      "satisfied": false
+    }
+  ],
+  "status": "open",
+  "created_at": "2026-11-16T06:38:00Z",
+  "created_by": "competitive-radar-onboarding",
+  "related_change_id": null,
+  "related_intelligence_id": null,
+  "notes": "Onboarding baseline request; do not bypass authentication, platform access controls, or device authorization."
+}
