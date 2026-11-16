@@ -1,0 +1,21 @@
+{
+  "captured_at": "2026-11-15T11:00:00Z",
+  "captured_by": "sample-fixture-generator",
+  "competitor_id": "sample-alpha",
+  "description": "SAMPLE — This is an explicitly labelled placeholder image used only to exercise the manual-screenshot display path. No real product screen is depicted.",
+  "evidence_id": "evm-sample-miniprogram",
+  "evidence_type": "manual_screenshot",
+  "files": [
+    "placeholder.svg"
+  ],
+  "notes": null,
+  "related_change_id": null,
+  "schema_version": 1,
+  "source_label": "WeChat Mini Program (manual)",
+  "title": "SAMPLE — Labelled placeholder, not a real screenshot",
+  "topic_ids": [
+    "family-collaboration"
+  ],
+  "url": null,
+  "verification_state": "demo_placeholder"
+}

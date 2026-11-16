@@ -10,7 +10,7 @@ from fpdf.enums import XPos, YPos
 
 # Map common Unicode punctuation to latin-1-safe equivalents (fpdf core fonts).
 _REPLACEMENTS = {
-    "-": "-",
+    # Two identical "-" keys were present upstream; the duplicate is removed.
     "-": "-",
     "•": "-",
     "≥": ">=",

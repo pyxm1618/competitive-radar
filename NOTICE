@@ -1,0 +1,49 @@
+Xiaoshuyin Competitive Radar V1
+Upstream attribution notice
+============================
+
+This project ("Xiaoshuyin Competitive Radar V1", target repository
+pyxm1618/competitive-radar, feature branch feat/competitive-radar-v1) is
+DERIVED FROM the "compete" project.
+
+Upstream project
+----------------
+  Name:         compete
+  Repository:   https://github.com/yassnemo/compete
+  Original author / copyright holder: Yassine Erradouani
+  Copyright:    Copyright (c) 2026 Yassine Erradouani
+  License:      MIT License
+
+Baseline
+--------
+  The upstream foundation was imported verbatim at commit:
+      ebc32b20c2016282976d2375af5821b530fa66bf
+  Date:     2026-07-03
+  Message:  "Round out the dashboard: signals + competitors pages,
+             404/error pages"
+
+  The original LICENSE file (MIT License, Copyright (c) 2026 Yassine
+  Erradouani) is retained UNCHANGED in the root of this repository.
+
+Statement
+---------
+  Substantial portions of this repository are upstream code, not original
+  work written from scratch. The V1 work is a thin integration layer
+  (documentation, a thin `radar` CLI wrapper, intelligence file-protocol
+  artifacts, and the compiled frontend artifact) built on top of the
+  upstream foundation, following the principle "reuse first, modify
+  minimally".
+
+  Retained from upstream: the Python collection pipeline (httpx/static,
+  Playwright/dynamic, RSS, jobs), snapshots, deterministic snapshot diff,
+  Parquet raw layer, DuckDB warehouse, dbt staging to marts, static JSON
+  export, Next.js + TypeScript + Tailwind + shadcn/ui, tests, CI patterns,
+  and static/serverless deployment. No second crawler, no second diff
+  engine, no second database, and no second change-detection authority
+  were introduced.
+
+  The MIT License requires that the above copyright notice and this
+  permission notice be included in all copies or substantial portions of
+  the Software. This NOTICE is provided to satisfy that requirement and to
+  give clear attribution to the upstream author. It does not alter or
+  replace the LICENSE file, which remains in full force.

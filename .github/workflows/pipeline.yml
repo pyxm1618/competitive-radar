@@ -1,36 +1,34 @@
-name: compete pipeline
+name: competitive-radar monitoring
 
-# Scheduled competitive-intelligence run: sync → collect → extract → dbt → report.
+# Non-AI monitoring only.
+#   sync competitors -> collect -> snapshot -> deterministic diff
+#   -> pending intelligence queue -> weekly pulse -> static JSON
+# NO model API key is referenced anywhere in this workflow. A missing
+# GOOGLE_API_KEY / GROQ_API_KEY / OPENAI_API_KEY can never fail this job.
+#
+# AI analysis is deliberately NOT automated here: it is human-triggered via
+# the external Antigravity agent (see docs/ANTIGRAVITY_WORKFLOW.md).
+
 on:
   schedule:
     - cron: "0 7 * * 1" # every Monday 07:00 UTC
   workflow_dispatch:
-    inputs:
-      provider:
-        description: "LLM provider (gemini|groq|ollama|mock)"
-        default: "mock"
-        required: false
 
 concurrency:
-  group: pipeline
+  group: competitive-radar-monitoring
   cancel-in-progress: false
 
-# Needed so the job can commit the refreshed static dashboard data back to the
-# repo (which triggers a Vercel redeploy of the server-less dashboard).
 permissions:
   contents: write
 
 jobs:
-  run:
+  monitor:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      COMPETE_LLM_PROVIDER: ${{ github.event.inputs.provider || 'gemini' }}
-      GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-      # Alerts are optional; set these repo secrets to enable.
-      COMPETE_ALERTS_ENABLED: ${{ secrets.SLACK_WEBHOOK_URL != '' && 'true' || 'false' }}
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      # Upstream extraction is retained for compatibility only. V1 default is
+      # the no-key path; setting this to `mock` makes that explicit.
+      COMPETE_LLM_PROVIDER: mock
     steps:
       - uses: actions/checkout@v4
 
@@ -40,44 +38,50 @@ jobs:
           enable-cache: true
 
       - name: Sync dependencies
-        run: uv sync --extra dbt --extra report --extra api
+        run: uv sync --extra dev --extra dbt --extra api --extra report
 
-      - name: Install Playwright Chromium
+      - name: Install Playwright Chromium (dynamic sources only)
         run: uv run playwright install --with-deps chromium
 
-      - name: Initialize warehouse
-        run: uv run compete init-db
+      # The DuckDB warehouse is the raw evidence + change authority. Persist it
+      # between weekly runs so a change is not re-detected as "new" each week.
+      - name: Restore warehouse cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/compete.duckdb
+            data/raw
+          key: radar-warehouse-${{ github.run_id }}
+          restore-keys: |
+            radar-warehouse-
 
-      - name: Run pipeline (sync → collect → extract → dbt → report)
-        run: uv run compete run-all --provider "$COMPETE_LLM_PROVIDER"
+      - name: Collect + deterministic diff (no AI)
+        run: uv run radar collect
 
-      - name: Generate dbt docs
-        working-directory: warehouse/dbt
-        env:
-          COMPETE_DUCKDB_PATH: ${{ github.workspace }}/data/compete.duckdb
-        run: uv run --project ${{ github.workspace }} dbt docs generate --profiles-dir .
+      - name: Generate/update Antigravity pending queue (no AI)
+        run: uv run radar prepare
 
-      - name: Refresh static dashboard data
-        run: uv run python scripts/export_static_data.py
+      - name: Validate intelligence + dbt build + static JSON (no AI)
+        run: uv run radar build --no-web
 
-      - name: Commit refreshed static data
+      - name: Commit refreshed authoritative outputs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add web/public/api-static
+          git add data/intelligence/pending data/intelligence/weekly web/public/radar-static web/public/evidence
           if git diff --cached --quiet; then
-            echo "No dashboard data changes to commit."
+            echo "No authoritative data changes to commit."
           else
-            git commit -m "chore: refresh static dashboard data [skip ci]"
+            git commit -m "chore(radar): refresh pending queue and static snapshot [skip ci]"
             git push
           fi
 
-      - name: Upload warehouse + reports
+      - name: Upload raw evidence + warehouse
         uses: actions/upload-artifact@v4
         with:
-          name: compete-warehouse
+          name: competitive-radar-warehouse
           path: |
             data/compete.duckdb
             data/raw/**
-            warehouse/dbt/target/**
+            data/intelligence/pending/**
           retention-days: 14

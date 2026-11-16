@@ -1,0 +1,49 @@
+# ============================================================
+# SAMPLE FIXTURE — NOT AUTHORITATIVE — tests / local demo only.
+# See config/competitors.yaml for the real authority (currently empty).
+# All entries below are synthetic and use example.com reserved domains.
+# ============================================================
+
+defaults:
+  throttle_seconds: 0.0
+  respect_robots: true
+
+competitors:
+  - id: sample-alpha
+    name: Sample Alpha (demo)
+    domain: alpha.example.com
+    industry: sample
+    tier: 1
+    why_tracked: Demonstrates the collection and intelligence contract without real competitors.
+    topic_ids: [problem-discovery, assessment, ai-conversation, action-plan]
+    tracked_urls:
+      - url: https://alpha.example.com/home
+        source_type: static
+        signal_hint: other
+      - url: https://alpha.example.com/changelog
+        source_type: static
+        signal_hint: other
+
+  - id: sample-beta
+    name: Sample Beta (demo)
+    domain: beta.example.com
+    industry: sample
+    tier: 2
+    why_tracked: Demonstrates a second competitor and a different topic mix.
+    topic_ids: [family-collaboration, tracking, follow-up]
+    tracked_urls:
+      - url: https://beta.example.com/features
+        source_type: static
+        signal_hint: other
+
+  - id: sample-gamma
+    name: Sample Gamma (demo)
+    domain: gamma.example.com
+    industry: sample
+    tier: 3
+    why_tracked: Demonstrates tier filtering and an empty-intelligence competitor.
+    topic_ids: [monetization, report]
+    tracked_urls:
+      - url: https://gamma.example.com/pricing
+        source_type: static
+        signal_hint: other

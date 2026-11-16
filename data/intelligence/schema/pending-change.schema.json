@@ -1,0 +1,249 @@
+{
+  "$defs": {
+    "EvidenceKind": {
+      "enum": [
+        "raw",
+        "manual"
+      ],
+      "title": "EvidenceKind",
+      "type": "string"
+    },
+    "EvidenceType": {
+      "enum": [
+        "snapshot_before",
+        "snapshot_after",
+        "screenshot",
+        "page_extract",
+        "changelog",
+        "manual_screenshot",
+        "manual_recording",
+        "manual_note",
+        "pdf_document"
+      ],
+      "title": "EvidenceType",
+      "type": "string"
+    },
+    "PendingEvidence": {
+      "properties": {
+        "evidence_id": {
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "file_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "File Path"
+        },
+        "kind": {
+          "$ref": "#/$defs/EvidenceKind",
+          "default": "raw"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "snapshot_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Snapshot Ref"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/EvidenceType"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        }
+      },
+      "required": [
+        "evidence_id",
+        "type",
+        "title"
+      ],
+      "title": "PendingEvidence",
+      "type": "object"
+    },
+    "SnapshotRef": {
+      "description": "A reference into the upstream raw evidence authority (raw.raw_pages).",
+      "properties": {
+        "content_hash": {
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "extract": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Extract"
+        },
+        "fetched_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fetched At"
+        },
+        "snapshot_id": {
+          "title": "Snapshot Id",
+          "type": "string"
+        },
+        "source_type": {
+          "default": "static",
+          "title": "Source Type",
+          "type": "string"
+        },
+        "url": {
+          "title": "Url",
+          "type": "string"
+        }
+      },
+      "required": [
+        "snapshot_id",
+        "url",
+        "content_hash"
+      ],
+      "title": "SnapshotRef",
+      "type": "object"
+    }
+  },
+  "description": "One already-detected change. Contains NO AI prose.",
+  "properties": {
+    "after_snapshot": {
+      "$ref": "#/$defs/SnapshotRef"
+    },
+    "analysis_status": {
+      "const": "pending",
+      "default": "pending",
+      "title": "Analysis Status",
+      "type": "string"
+    },
+    "before_snapshot": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SnapshotRef"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "change_id": {
+      "pattern": "^chg-[0-9a-f]{24}$",
+      "title": "Change Id",
+      "type": "string"
+    },
+    "change_type": {
+      "enum": [
+        "new",
+        "updated",
+        "removed"
+      ],
+      "title": "Change Type",
+      "type": "string"
+    },
+    "competitor_id": {
+      "title": "Competitor Id",
+      "type": "string"
+    },
+    "detected_at": {
+      "title": "Detected At",
+      "type": "string"
+    },
+    "diff": {
+      "title": "Diff",
+      "type": "string"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/PendingEvidence"
+      },
+      "minItems": 1,
+      "title": "Evidence",
+      "type": "array"
+    },
+    "provenance": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Provenance",
+      "type": "object"
+    },
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "source_id": {
+      "title": "Source Id",
+      "type": "string"
+    },
+    "source_type": {
+      "title": "Source Type",
+      "type": "string"
+    },
+    "url": {
+      "title": "Url",
+      "type": "string"
+    }
+  },
+  "required": [
+    "change_id",
+    "competitor_id",
+    "source_id",
+    "source_type",
+    "url",
+    "detected_at",
+    "change_type",
+    "before_snapshot",
+    "after_snapshot",
+    "diff",
+    "evidence"
+  ],
+  "title": "PendingChange",
+  "type": "object"
+}

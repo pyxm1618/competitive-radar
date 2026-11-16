@@ -16,7 +16,11 @@ htmlcov/
 *.local.env
 
 # --- Data / warehouse (generated) ---
-data/
+# Competitive Radar V1: data/intelligence/** is AUTHORITATIVE and must be
+# version-controlled (pending queue, intelligence output, research queue,
+# weekly pulses, JSON Schemas). Everything else under data/ stays generated.
+data/*
+!data/intelligence/
 *.duckdb
 *.duckdb.wal
 warehouse/dbt/target/

@@ -1,0 +1,146 @@
+{
+  "authority": {
+    "changes": "deterministic snapshot diff (upstream compete, raw.changes)",
+    "competitors": "config/competitors.yaml",
+    "frontend": "web/public/radar-static/radar.json (renderer only)",
+    "intelligence": "data/intelligence/records/*.json",
+    "raw_evidence": "upstream raw.raw_pages + data/raw/*.parquet",
+    "topics": "config/topics.yaml"
+  },
+  "before_after": [],
+  "competitors": [],
+  "demo": false,
+  "evidence": [],
+  "generated_at": "2026-11-16T03:27:29.325425Z",
+  "intelligence": [],
+  "manual_research": [],
+  "summary": {
+    "detected_changes": 0,
+    "important_changes": 0,
+    "manual_research_requests": 0,
+    "pending_intelligence": 0,
+    "tracked_competitors": 0,
+    "tracked_sources": 0
+  },
+  "topics": [
+    {
+      "competitor_ids": [],
+      "description": "How a product helps a family discover and name the problem they are facing.",
+      "evidence_ids": [],
+      "id": "problem-discovery",
+      "intelligence_count": 0,
+      "label": "Problem discovery"
+    },
+    {
+      "competitor_ids": [],
+      "description": "Structured assessment, scales, questionnaires and intake evaluation.",
+      "evidence_ids": [],
+      "id": "assessment",
+      "intelligence_count": 0,
+      "label": "Assessment"
+    },
+    {
+      "competitor_ids": [],
+      "description": "Turning assessment signals into a formulation or diagnostic conclusion.",
+      "evidence_ids": [],
+      "id": "diagnosis",
+      "intelligence_count": 0,
+      "label": "Diagnosis / formulation"
+    },
+    {
+      "competitor_ids": [],
+      "description": "Conversational AI used as the primary interaction surface with a family.",
+      "evidence_ids": [],
+      "id": "ai-conversation",
+      "intelligence_count": 0,
+      "label": "AI conversation"
+    },
+    {
+      "competitor_ids": [],
+      "description": "Generating concrete, sequenced actions from an assessment or formulation.",
+      "evidence_ids": [],
+      "id": "action-plan",
+      "intelligence_count": 0,
+      "label": "Action plan"
+    },
+    {
+      "competitor_ids": [],
+      "description": "Coordination between parents, caregivers and other family members.",
+      "evidence_ids": [],
+      "id": "family-collaboration",
+      "intelligence_count": 0,
+      "label": "Family collaboration"
+    },
+    {
+      "competitor_ids": [],
+      "description": "How the child themselves participates in the process.",
+      "evidence_ids": [],
+      "id": "child-participation",
+      "intelligence_count": 0,
+      "label": "Child participation"
+    },
+    {
+      "competitor_ids": [],
+      "description": "Ongoing logging of behaviour, mood, tasks or outcomes over time.",
+      "evidence_ids": [],
+      "id": "tracking",
+      "intelligence_count": 0,
+      "label": "Tracking"
+    },
+    {
+      "competitor_ids": [],
+      "description": "Re-engagement, check-ins and continuation after an initial plan.",
+      "evidence_ids": [],
+      "id": "follow-up",
+      "intelligence_count": 0,
+      "label": "Follow-up"
+    },
+    {
+      "competitor_ids": [],
+      "description": "Structured reflection on what happened and what changed.",
+      "evidence_ids": [],
+      "id": "reflection",
+      "intelligence_count": 0,
+      "label": "Reflection"
+    },
+    {
+      "competitor_ids": [],
+      "description": "Produced artefacts, summaries and shareable reports.",
+      "evidence_ids": [],
+      "id": "report",
+      "intelligence_count": 0,
+      "label": "Report"
+    },
+    {
+      "competitor_ids": [],
+      "description": "Human professional involvement, referral and service delivery.",
+      "evidence_ids": [],
+      "id": "expert-service",
+      "intelligence_count": 0,
+      "label": "Expert service"
+    },
+    {
+      "competitor_ids": [],
+      "description": "Pricing, packaging, subscription and commercialization mechanics.",
+      "evidence_ids": [],
+      "id": "monetization",
+      "intelligence_count": 0,
+      "label": "Monetization"
+    }
+  ],
+  "weekly": {
+    "by_decision": {
+      "act": 0,
+      "ignore": 0,
+      "investigate": 0,
+      "watch": 0
+    },
+    "cross_competitor_themes": [],
+    "important_changes": 0,
+    "manual_research_needed": 0,
+    "top_changes": [],
+    "total_changes": 0,
+    "week_end": "2026-11-17",
+    "week_start": "2026-11-09"
+  }
+}

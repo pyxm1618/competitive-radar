@@ -1,0 +1,44 @@
+{
+  "competitor_id": "sample-beta",
+  "created_at": "2026-11-16T03:02:27.854382Z",
+  "created_by": "sample-fixture-generator",
+  "notes": null,
+  "related_change_id": "chg-1d272a6da16a863daaf31266",
+  "related_intelligence_id": "int-830992d67c69ee199e325110",
+  "request_id": "req-41a374bebaf797fafda8",
+  "required_evidence": [
+    {
+      "label": "SAMPLE — onboarding screenshot",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "SAMPLE — parent task view screenshot",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "SAMPLE — child task view screenshot",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "SAMPLE — final result page screenshot",
+      "required": true,
+      "satisfied": false
+    }
+  ],
+  "research_question": "SAMPLE — Does the shared family task flow require a separate child onboarding?",
+  "schema_version": 1,
+  "status": "open",
+  "suggested_steps": [
+    "SAMPLE — Capture the iOS onboarding up to the first shared task.",
+    "SAMPLE — Capture the parent view and the child view of the same task.",
+    "SAMPLE — Capture the final result page after the task is completed."
+  ],
+  "topic_ids": [
+    "family-collaboration",
+    "child-participation"
+  ],
+  "why_needed": "SAMPLE — The marketing page cannot show whether the child participates directly."
+}

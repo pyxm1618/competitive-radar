@@ -1,0 +1,36 @@
+{
+  "analyst": "sample-fixture-generator",
+  "change_id": "chg-ac7208ecf8211c87e787c627",
+  "change_type": "updated",
+  "competitor_id": "sample-gamma",
+  "confidence": "high",
+  "created_at": "2026-11-15T12:00:00Z",
+  "date": "2026-11-15",
+  "decision": "ignore",
+  "evidence": [
+    {
+      "evidence_id": "ev-0edb1356eb3996b322db",
+      "note": null,
+      "role": "after"
+    }
+  ],
+  "human_review_status": "unreviewed",
+  "impact": "low",
+  "intelligence_id": "int-1e714d6c9460cbdb2eaf888a",
+  "mechanism": "SAMPLE — Simple tier price adjustment plus an annual billing option.",
+  "notes": null,
+  "provenance": {
+    "pending_file": "examples/intelligence/pending/chg-ac7208ecf8211c87e787c627.json",
+    "snapshot_after": "snap-9451f6ae48f531eb32895e78",
+    "snapshot_before": "snap-687dcb89dc48f6a4a3cc8472",
+    "url": "https://gamma.example.com/pricing"
+  },
+  "relevance": "low",
+  "schema_version": 1,
+  "summary": "SAMPLE — Premium price changed and an annual plan appeared.",
+  "topic_ids": [
+    "monetization"
+  ],
+  "why_it_matters": "SAMPLE — No product mechanism change; noise for this radar.",
+  "xiaoshuyin_relevance": "SAMPLE — Pricing packaging is outside the current product-design questions."
+}

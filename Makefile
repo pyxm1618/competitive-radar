@@ -2,7 +2,7 @@
 # Windows users without `make` can run the underlying commands directly
 # (see each target) or use `uv run python scripts/demo.py`.
 
-.PHONY: help install install-web demo demo-data run-all api web test lint fmt typecheck dbt-build dbt-docs screenshots clean
+.PHONY: help install install-web demo demo-data run-all api web test lint fmt typecheck dbt-build dbt-docs screenshots clean radar-collect radar-prepare radar-validate radar-build radar-update radar-status radar-demo radar-contracts
 
 help:
 	@echo "compete targets:"
@@ -10,13 +10,48 @@ help:
 	@echo "  install-web  Install web deps (npm)"
 	@echo "  demo         Seed demo data, build marts, start API + web"
 	@echo "  demo-data    Seed demo data and build the dbt marts only"
-	@echo "  run-all      Real pipeline: sync -> collect -> extract -> dbt -> report"
+	@echo "  run-all      Legacy upstream LLM pipeline: sync -> collect -> extract -> dbt -> report"
 	@echo "  api          Start the FastAPI server"
 	@echo "  web          Start the Next.js dev server"
 	@echo "  test         Run the Python test suite"
 	@echo "  lint / fmt   Ruff lint / Ruff+Black format"
 	@echo "  dbt-build    Build + test the dbt marts"
 	@echo "  screenshots  Capture dashboard screenshots (needs web+api running)"
+	@echo ""
+	@echo "competitive-radar targets (no model API key required):"
+	@echo "  radar-collect   sync -> collect -> snapshot -> deterministic diff"
+	@echo "  radar-prepare   generate/update the Antigravity pending queue"
+	@echo "  radar-validate  validate authoritative intelligence records"
+	@echo "  radar-build     validate -> dbt -> static JSON -> frontend build"
+	@echo "  radar-update    collect + prepare + build"
+	@echo "  radar-status    show the contents of every authority"
+	@echo "  radar-demo      compile sample fixtures into the static artifact"
+	@echo "  radar-contracts regenerate JSON Schemas from Pydantic contracts"
+
+# --- Competitive Radar V1 (default workflow) ------------------------------- #
+radar-collect:
+	uv run radar collect
+
+radar-prepare:
+	uv run radar prepare
+
+radar-validate:
+	uv run radar validate
+
+radar-build:
+	uv run radar build
+
+radar-update:
+	uv run radar update
+
+radar-status:
+	uv run radar status
+
+radar-demo:
+	uv run radar demo-build
+
+radar-contracts:
+	uv run radar contracts
 
 install:
 	uv sync --extra dev --extra dbt --extra api --extra report

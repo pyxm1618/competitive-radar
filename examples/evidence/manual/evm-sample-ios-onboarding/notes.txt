@@ -1,0 +1,2 @@
+SAMPLE MANUAL EVIDENCE — NOT REAL EVIDENCE.
+This file exists only to demonstrate the manual-evidence directory contract.

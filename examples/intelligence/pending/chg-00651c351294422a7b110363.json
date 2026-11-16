@@ -1,0 +1,58 @@
+{
+  "after_snapshot": {
+    "content_hash": "2a5543ecc56d0c91402824c6",
+    "extract": "SAMPLE — AI consultation plus a staged action plan with weekly check-ins.",
+    "fetched_at": "2026-11-10T09:00:00Z",
+    "snapshot_id": "snap-d2d37201f2c1e30a72273be2",
+    "source_type": "static",
+    "url": "https://alpha.example.com/home"
+  },
+  "analysis_status": "pending",
+  "before_snapshot": {
+    "content_hash": "51272890183e8ed626ab527d",
+    "extract": "SAMPLE — AI consultation only. Ask a question, receive a written answer.",
+    "fetched_at": "2026-10-20T09:00:00Z",
+    "snapshot_id": "snap-c923965e1453c19047d6c90d",
+    "source_type": "static",
+    "url": "https://alpha.example.com/home"
+  },
+  "change_id": "chg-00651c351294422a7b110363",
+  "change_type": "updated",
+  "competitor_id": "sample-alpha",
+  "detected_at": "2026-11-10T09:00:00Z",
+  "diff": "--- before\n+++ after\n-SAMPLE — AI consultation only. Ask a question, receive a written answer.\n+SAMPLE — AI consultation plus a staged action plan with weekly check-ins.",
+  "evidence": [
+    {
+      "evidence_id": "ev-64f9b7e1742f76e712f6",
+      "file_path": null,
+      "kind": "raw",
+      "note": null,
+      "snapshot_ref": "snap-c923965e1453c19047d6c90d",
+      "title": "SAMPLE — Before snapshot: https://alpha.example.com/home",
+      "type": "snapshot_before",
+      "url": "https://alpha.example.com/home"
+    },
+    {
+      "evidence_id": "ev-39ca0bf9e6e3f660fec2",
+      "file_path": null,
+      "kind": "raw",
+      "note": null,
+      "snapshot_ref": "snap-d2d37201f2c1e30a72273be2",
+      "title": "SAMPLE — After snapshot: https://alpha.example.com/home",
+      "type": "snapshot_after",
+      "url": "https://alpha.example.com/home"
+    }
+  ],
+  "provenance": {
+    "change_authority": "SAMPLE deterministic snapshot diff",
+    "competitor_authority": "config/examples/competitors.sample.yaml",
+    "diff_engine": "pipeline/detect/change.py",
+    "raw_evidence_table": "raw.raw_pages (SAMPLE reference)",
+    "snapshot_after": "snap-d2d37201f2c1e30a72273be2",
+    "snapshot_before": "snap-c923965e1453c19047d6c90d"
+  },
+  "schema_version": 1,
+  "source_id": "src-051847f0dd51522d",
+  "source_type": "static",
+  "url": "https://alpha.example.com/home"
+}

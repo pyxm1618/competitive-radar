@@ -1,4 +1,12 @@
-# ROADMAP — From "complete" to portfolio-grade
+# ROADMAP — upstream historical document (NOT the V1 roadmap)
+
+> **Upstream baseline.** This file belongs to `yassnemo/compete` and is kept
+> verbatim for attribution. It describes the upstream project's own future
+> phases (including its LLM-extraction path and its original dashboard), which
+> are **not** the Competitive Radar V1 plan. The V1 default workflow is the
+> no-key Antigravity file protocol documented in `docs/ARCHITECTURE.md`,
+> `docs/AUTHORITY.md` and `docs/ANTIGRAVITY_WORKFLOW.md`. Do not use this file
+> as an authority for V1 behaviour.
 
 The original build (Phases 0-7) is done and verified: collection, LLM extraction,
 DuckDB + dbt warehouse, FastAPI, the Next.js dashboard with the bone/ink/lime

@@ -1,0 +1,153 @@
+{
+  "$defs": {
+    "RequiredEvidenceItem": {
+      "properties": {
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "satisfied": {
+          "default": false,
+          "title": "Satisfied",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "label"
+      ],
+      "title": "RequiredEvidenceItem",
+      "type": "object"
+    },
+    "ResearchStatus": {
+      "enum": [
+        "open",
+        "in_progress",
+        "resolved",
+        "dismissed"
+      ],
+      "title": "ResearchStatus",
+      "type": "string"
+    }
+  },
+  "description": "Simple, viewable queue. NOT a task-management system.",
+  "properties": {
+    "competitor_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Competitor Id"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "created_by": {
+      "default": "antigravity",
+      "title": "Created By",
+      "type": "string"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notes"
+    },
+    "related_change_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Related Change Id"
+    },
+    "related_intelligence_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Related Intelligence Id"
+    },
+    "request_id": {
+      "pattern": "^req-[0-9a-f]{20}$",
+      "title": "Request Id",
+      "type": "string"
+    },
+    "required_evidence": {
+      "items": {
+        "$ref": "#/$defs/RequiredEvidenceItem"
+      },
+      "minItems": 1,
+      "title": "Required Evidence",
+      "type": "array"
+    },
+    "research_question": {
+      "minLength": 1,
+      "title": "Research Question",
+      "type": "string"
+    },
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "status": {
+      "$ref": "#/$defs/ResearchStatus",
+      "default": "open"
+    },
+    "suggested_steps": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Suggested Steps",
+      "type": "array"
+    },
+    "topic_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Topic Ids",
+      "type": "array"
+    },
+    "why_needed": {
+      "minLength": 1,
+      "title": "Why Needed",
+      "type": "string"
+    }
+  },
+  "required": [
+    "request_id",
+    "research_question",
+    "why_needed",
+    "suggested_steps",
+    "required_evidence"
+  ],
+  "title": "ManualResearchRequest",
+  "type": "object"
+}

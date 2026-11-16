@@ -1,51 +1,44 @@
 # ============================================================
-# Competitor tracking configuration (config-driven pipeline).
-# Add competitors and the public URLs to track. No code changes needed.
+# COMPETITOR AUTHORITY — config/competitors.yaml
+# ============================================================
+# This is the ONLY authoritative source for competitors and monitored URLs.
+# The frontend must never maintain its own competitor list.
 #
-# source_type drives which collector is used:
-#   static   -> httpx + selectolax + trafilatura (server-rendered pages)
-#   dynamic  -> Playwright (JS-heavy pages)
-#   rss      -> feedparser (blog/news feeds)
-#   jobs     -> jobs collector (careers pages / boards)
+# STATUS: intentionally EMPTY.
+# The real ~55-product list has not been supplied for this repository yet.
+# Do NOT invent, scrape, or research competitors to populate this file.
+# When the authoritative list is available, import it here in one pass.
+#
+# A clearly-labelled SAMPLE fixture exists at config/examples/competitors.sample.yaml.
+# It is for tests / local demo only and is NOT authoritative.
+#
+# source_type drives which upstream collector is used:
+#   static   -> httpx + selectolax + trafilatura
+#   dynamic  -> Playwright
+#   rss      -> feedparser
+#   jobs     -> jobs collector
+#
+# Optional per-competitor fields (all optional, no code changes needed):
+#   why_tracked: short reason this competitor matters to Xiaoshuyin
+#   topic_ids:   capability taxonomy ids from config/topics.yaml
+#
+# Example entry (COMMENTED OUT — do not uncomment as production data):
+# competitors:
+#   - id: example
+#     name: Example (sample only)
+#     domain: example.com
+#     industry: sample
+#     tier: 2
+#     why_tracked: sample entry used for contract tests
+#     topic_ids: [problem-discovery]
+#     tracked_urls:
+#       - url: https://example.com/
+#         source_type: static
+#         signal_hint: other
 # ============================================================
 
 defaults:
   throttle_seconds: 2.0
   respect_robots: true
 
-competitors:
-  - id: anthropic
-    name: Anthropic
-    domain: anthropic.com
-    industry: AI / LLM
-    tier: 1
-    tracked_urls:
-      - url: https://www.anthropic.com/news
-        source_type: static
-        signal_hint: press_release
-      - url: https://www.anthropic.com/pricing
-        source_type: static
-        signal_hint: pricing_change
-      - url: https://boards.greenhouse.io/anthropic
-        source_type: jobs
-        signal_hint: job_posting
-
-  - id: huggingface
-    name: Hugging Face
-    domain: huggingface.co
-    industry: AI / ML platform
-    tier: 1
-    tracked_urls:
-      - url: https://huggingface.co/blog/feed.xml
-        source_type: rss
-        signal_hint: blog_post
-
-  - id: mistral
-    name: Mistral AI
-    domain: mistral.ai
-    industry: AI / LLM
-    tier: 2
-    tracked_urls:
-      - url: https://mistral.ai/news
-        source_type: dynamic
-        signal_hint: product_launch
+competitors: []
