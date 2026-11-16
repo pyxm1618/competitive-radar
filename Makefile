@@ -10,7 +10,7 @@ help:
 	@echo "  install-web  Install web deps (npm)"
 	@echo "  demo         Seed demo data, build marts, start API + web"
 	@echo "  demo-data    Seed demo data and build the dbt marts only"
-	@echo "  run-all      Real pipeline: sync -> collect -> extract -> dbt -> report"
+	@echo "  run-all      Legacy upstream LLM pipeline: sync -> collect -> extract -> dbt -> report"
 	@echo "  api          Start the FastAPI server"
 	@echo "  web          Start the Next.js dev server"
 	@echo "  test         Run the Python test suite"

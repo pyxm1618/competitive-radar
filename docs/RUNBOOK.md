@@ -104,12 +104,21 @@ evidence/manual/<evidence_id>/
 
 ```json
 {
-  "evidence_id": "sample-evidence-001",
-  "source": "SAMPLE — manually captured competitor pricing page",
-  "original_url": "https://example.com/pricing",
-  "captured_at": "2026-11-16",
-  "description": "SAMPLE — screenshot of the pricing change referenced by change_id",
-  "asset_files": ["screenshot.png"]
+  "schema_version": 1,
+  "evidence_id": "evm-example-pricing-001",
+  "competitor_id": "example",
+  "captured_at": "2026-11-16T10:00:00Z",
+  "evidence_type": "manual_screenshot",
+  "title": "SAMPLE — manually captured competitor pricing page",
+  "description": "SAMPLE — screenshot of the pricing change referenced by the record",
+  "source_label": "Browser screenshot (manual)",
+  "url": "https://example.com/pricing",
+  "files": ["screenshot.png"],
+  "topic_ids": ["monetization"],
+  "related_change_id": null,
+  "verification_state": "unverified",
+  "captured_by": "human",
+  "notes": null
 }
 ```
 
@@ -131,14 +140,34 @@ Use the template
 
 ```json
 {
-  "request_id": "sample-research-001",
-  "change_id": "sample-change-001",
-  "competitor_id": "sample-*",
+  "schema_version": 1,
+  "request_id": "req-0123456789abcdef0123",
+  "competitor_id": "example",
+  "topic_ids": ["monetization"],
   "research_question": "SAMPLE — what exactly changed on the pricing page?",
   "why_needed": "SAMPLE — evidence is thin, confidence was lowered to low",
-  "suggested_steps": ["SAMPLE — re-capture the page", "SAMPLE — confirm the plan names"],
-  "required_evidence": ["SAMPLE — dated screenshot", "SAMPLE — original URL"],
-  "status": "open"
+  "suggested_steps": [
+    "SAMPLE — re-capture the page",
+    "SAMPLE — confirm the plan names"
+  ],
+  "required_evidence": [
+    {
+      "label": "SAMPLE — dated screenshot",
+      "required": true,
+      "satisfied": false
+    },
+    {
+      "label": "SAMPLE — original URL",
+      "required": true,
+      "satisfied": false
+    }
+  ],
+  "status": "open",
+  "created_at": "2026-11-16T10:00:00Z",
+  "created_by": "antigravity",
+  "related_change_id": "chg-0123456789abcdef01234567",
+  "related_intelligence_id": "int-0123456789abcdef01234567",
+  "notes": null
 }
 ```
 
