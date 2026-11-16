@@ -81,7 +81,7 @@ the pending queue. AI prose is never written into the raw change authority.
 
 | Concern | Single source of truth | Exact path |
 |---|---|---|
-| Competitors | `config/competitors.yaml` (intentionally empty in V1) | `config/competitors.yaml` |
+| Competitors | `config/competitors.yaml` (55 onboarded objects: 34 Tier 1 / 21 Tier 2) | `config/competitors.yaml` |
 | Topic taxonomy (13 topics) | `config/topics.yaml` | `config/topics.yaml` |
 | Raw evidence | upstream `raw.raw_pages` (DuckDB) + `data/raw/*.parquet` | no second raw-evidence DB |
 | Change detection | deterministic snapshot comparison | upstream `pipeline/detect/change.py` |
