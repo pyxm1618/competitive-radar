@@ -96,6 +96,11 @@ def test_authoritative_build_reflects_real_onboarding_baseline() -> None:
     assert snapshot.before_after == []
     assert len(snapshot.manual_research) == 11
     assert snapshot.summary.manual_research_requests == 11
+    assert snapshot.summary.detected_changes == 0
+    assert snapshot.summary.pending_intelligence == 0
+    assert snapshot.summary.important_changes == 0
+    assert snapshot.weekly.total_changes == 0
+    assert snapshot.weekly.manual_research_needed == 11
     assert snapshot.weekly.by_decision == {
         "act": 0,
         "investigate": 0,
@@ -122,3 +127,17 @@ def test_committed_static_artifact_matches_the_frontend_contract() -> None:
     ):
         assert key in payload
     assert snapshot.weekly is not None
+    assert snapshot.demo is False
+    assert snapshot.summary.tracked_competitors == 55
+    assert snapshot.summary.tracked_sources == 98
+    assert snapshot.summary.manual_research_requests == 11
+    assert snapshot.summary.detected_changes == 0
+    assert snapshot.summary.pending_intelligence == 0
+    assert snapshot.summary.important_changes == 0
+    assert len(snapshot.competitors) == 55
+    assert len(snapshot.manual_research) == 11
+    assert snapshot.intelligence == []
+    assert snapshot.evidence == []
+    assert snapshot.before_after == []
+    assert snapshot.weekly.total_changes == 0
+    assert snapshot.weekly.manual_research_needed == 11
