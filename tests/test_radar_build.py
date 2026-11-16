@@ -85,15 +85,17 @@ def test_weekly_pulse_is_derived_without_a_model() -> None:
     assert snapshot.weekly.week_start < snapshot.weekly.week_end
 
 
-def test_authoritative_build_is_an_honest_empty_state() -> None:
+def test_authoritative_build_reflects_real_onboarding_baseline() -> None:
     snapshot = compile_radar(demo=False, write=False)
     assert snapshot.demo is False
-    assert snapshot.summary.tracked_competitors == 0
-    assert snapshot.competitors == []
+    assert snapshot.summary.tracked_competitors == 55
+    assert snapshot.summary.tracked_sources == 102
+    assert len(snapshot.competitors) == 55
     assert snapshot.intelligence == []
     assert snapshot.evidence == []
     assert snapshot.before_after == []
-    assert snapshot.manual_research == []
+    assert len(snapshot.manual_research) == 10
+    assert snapshot.summary.manual_research_requests == 10
     assert snapshot.weekly.by_decision == {
         "act": 0,
         "investigate": 0,
