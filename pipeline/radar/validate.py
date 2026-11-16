@@ -24,7 +24,7 @@ from pathlib import Path
 import yaml
 from pydantic import ValidationError
 
-from pipeline.config import load_competitors
+from pipeline.config import Settings, get_settings, load_competitors
 from pipeline.radar.contracts import (
     Confidence,
     IntelligenceRecord,
@@ -40,6 +40,7 @@ from pipeline.radar.paths import (
     TOPICS_PATH,
 )
 from pipeline.radar.pending import active_source_pairs, is_active_source, load_pending
+from pipeline.storage.duckdb_store import Warehouse
 
 
 @dataclass(frozen=True)
@@ -95,6 +96,31 @@ def load_records(directory: Path | None = None) -> tuple[list[IntelligenceRecord
     return records, errors, count
 
 
+def _historical_change_lineage(
+    settings: Settings | None = None,
+) -> dict[str, tuple[str, str]]:
+    """Read change_id -> (competitor_id, url) from the authoritative raw history."""
+    try:
+        wh = Warehouse.from_settings(settings or get_settings(), read_only=True)
+    except Exception:
+        return {}
+    try:
+        rows = wh.query(
+            """
+            SELECT change_id, competitor_id, url
+            FROM raw.changes
+            WHERE change_id IS NOT NULL
+              AND competitor_id IS NOT NULL
+              AND url IS NOT NULL
+            """
+        )
+        return {str(row[0]): (str(row[1]), str(row[2])) for row in rows}
+    except Exception:
+        return {}
+    finally:
+        wh.close()
+
+
 def _evidence_ownership(
     pending_items: list,
     manual_root: Path | None = None,
@@ -123,6 +149,7 @@ def validate_intelligence(
     competitors_path: Path | None = None,
     topics_path: Path | None = None,
     manual_root: Path | None = None,
+    settings: Settings | None = None,
 ) -> ValidationReport:
     """Validate current authoritative intelligence and preserve retired history."""
     report = ValidationReport()
@@ -139,6 +166,7 @@ def validate_intelligence(
     topic_ids = topics.topic_ids
 
     all_pending = load_pending(pending_dir or PENDING_DIR)
+    all_pending_by_change = {item.change_id: item for item in all_pending}
     pending = [
         item
         for item in all_pending
@@ -149,6 +177,7 @@ def validate_intelligence(
 
     seen_change: dict[str, str] = {}
     seen_id: dict[str, str] = {}
+    historical_lineage: dict[str, tuple[str, str]] | None = None
 
     for record in records:
         label = f"{record.intelligence_id} ({record.change_id})"
@@ -172,7 +201,21 @@ def validate_intelligence(
         seen_id[record.intelligence_id] = label
 
         current_pending = pending_by_change.get(record.change_id)
-        record_url = str(record.provenance.get("url") or "")
+        source = all_pending_by_change.get(record.change_id)
+        source_identity: tuple[str, str] | None = None
+        if source is not None:
+            source_identity = (source.competitor_id, source.url)
+        elif current_pending is None:
+            if historical_lineage is None:
+                historical_lineage = _historical_change_lineage(settings)
+            source_identity = historical_lineage.get(record.change_id)
+
+        lineage_url = (
+            source_identity[1]
+            if source_identity is not None and source_identity[0] == record.competitor_id
+            else ""
+        )
+        record_url = lineage_url or str(record.provenance.get("url") or "")
 
         historical = current_pending is None and (
             record.competitor_id not in competitor_ids

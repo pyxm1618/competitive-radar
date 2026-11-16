@@ -58,8 +58,21 @@ def load_manual_evidence(root: Path | None = None) -> list[ManualEvidence]:
     if not directory.exists():
         return []
     items: list[ManualEvidence] = []
+    seen_evidence_ids: dict[str, Path] = {}
     for meta in sorted(directory.glob("*/metadata.json")):
         item = ManualEvidence.model_validate_json(meta.read_text(encoding="utf-8"))
+        previous = seen_evidence_ids.get(item.evidence_id)
+        if previous is not None:
+            raise ValueError(
+                f"duplicate manual evidence_id '{item.evidence_id}' in "
+                f"{previous.parent.name}/ and {meta.parent.name}/"
+            )
+        seen_evidence_ids[item.evidence_id] = meta
+        if meta.parent.name != item.evidence_id:
+            raise ValueError(
+                f"manual evidence directory '{meta.parent.name}' must match "
+                f"metadata evidence_id '{item.evidence_id}'"
+            )
         missing = [
             name for name in item.files if not _contained_asset_path(meta.parent, name).is_file()
         ]

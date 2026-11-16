@@ -152,6 +152,7 @@ def _record(
     competitor_id: str | None = None,
     change_id: str | None = None,
     provenance_url: str | None = None,
+    include_provenance_url: bool = True,
 ) -> IntelligenceRecord:
     cid = change_id or item.change_id
     return IntelligenceRecord.model_validate(
@@ -172,7 +173,7 @@ def _record(
             "why_it_matters": "The evidence is sufficient for this regression fixture.",
             "evidence": [{"evidence_id": evidence_id, "role": "after"}],
             "human_review_status": "unreviewed",
-            "provenance": {"url": provenance_url or item.url},
+            "provenance": {"url": provenance_url or item.url} if include_provenance_url else {},
         }
     )
 
@@ -385,6 +386,187 @@ def test_evidence_ownership_rejects_cross_competitor_and_wrong_change(
 
     correct_manual = validate(_record(alpha, alpha_manual.evidence_id), "correct-manual")
     assert correct_manual.ok, correct_manual.errors
+
+
+def test_duplicate_manual_evidence_id_is_rejected_across_owners(tmp_path: Path) -> None:
+    root = tmp_path / "manual"
+    first = _write_manual(
+        root,
+        evidence_id="evm-shared",
+        competitor_id="sample-alpha",
+    )
+    duplicate_dir = root / "folder-z"
+    duplicate_dir.mkdir(parents=True)
+    duplicate = first.model_copy(update={"competitor_id": "sample-beta"})
+    (duplicate_dir / "metadata.json").write_text(
+        duplicate.model_dump_json(indent=2),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="duplicate manual evidence_id 'evm-shared'"):
+        load_manual_evidence(root)
+
+
+def test_duplicate_manual_evidence_id_is_rejected_for_same_owner(tmp_path: Path) -> None:
+    root = tmp_path / "manual"
+    first = _write_manual(
+        root,
+        evidence_id="evm-shared",
+        competitor_id="sample-alpha",
+    )
+    duplicate_dir = root / "folder-z"
+    duplicate_dir.mkdir(parents=True)
+    (duplicate_dir / "metadata.json").write_text(
+        first.model_dump_json(indent=2),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="duplicate manual evidence_id 'evm-shared'"):
+        load_manual_evidence(root)
+
+
+def test_manual_evidence_directory_must_match_metadata_id(tmp_path: Path) -> None:
+    root = tmp_path / "manual"
+    _write_manual(
+        root,
+        evidence_id="evm-two",
+        competitor_id="sample-alpha",
+    )
+    (root / "evm-two").rename(root / "evm-one")
+
+    with pytest.raises(
+        ValueError,
+        match="manual evidence directory 'evm-one' must match metadata evidence_id 'evm-two'",
+    ):
+        load_manual_evidence(root)
+
+
+def test_removed_url_missing_provenance_uses_raw_change_lineage_and_builds(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
+    settings = _settings(tmp_path, monkeypatch)
+    config = _write_config(
+        tmp_path,
+        [_competitor("sample-alpha", "alpha.example.com", [URL_A, URL_A2])],
+    )
+    wh = Warehouse.from_settings(settings)
+    for suffix, url in (("home", URL_A), ("changelog", URL_A2)):
+        _snapshot(
+            wh,
+            snapshot_id=f"snap-{suffix}-old",
+            competitor_id="sample-alpha",
+            url=url,
+            content_hash=f"{suffix}-old",
+            text=f"{suffix} old",
+            when=BASE_TIME - timedelta(days=1),
+        )
+        _snapshot(
+            wh,
+            snapshot_id=f"snap-{suffix}-new",
+            competitor_id="sample-alpha",
+            url=url,
+            content_hash=f"{suffix}-new",
+            text=f"{suffix} new",
+            when=BASE_TIME,
+        )
+    wh.close()
+
+    assert run_collect(settings, config).detected_changes == 2
+    pending_dir = tmp_path / "pending"
+    assert run_prepare(settings, path=config, out_dir=pending_dir).created == 2
+    pending_by_url = {item.url: item for item in load_pending(pending_dir)}
+    retired = pending_by_url[URL_A]
+    active = pending_by_url[URL_A2]
+
+    records_dir = tmp_path / "records"
+    retired_record = _record(
+        retired,
+        retired.evidence[-1].evidence_id,
+        include_provenance_url=False,
+    )
+    active_record = _record(
+        active,
+        active.evidence[-1].evidence_id,
+        include_provenance_url=False,
+    )
+    _write_record(records_dir, retired_record)
+    _write_record(records_dir, active_record)
+
+    config = _write_config(
+        tmp_path,
+        [_competitor("sample-alpha", "alpha.example.com", [URL_A2])],
+    )
+    prepared = run_prepare(settings, path=config, out_dir=pending_dir)
+    assert prepared.removed_inactive == 1
+    assert all(item.url == URL_A2 for item in load_pending(pending_dir))
+
+    manual_root = tmp_path / "manual"
+    research_dir = tmp_path / "research"
+    manual_root.mkdir()
+    research_dir.mkdir()
+
+    report = validate_intelligence(
+        records_dir=records_dir,
+        pending_dir=pending_dir,
+        competitors_path=config,
+        topics_path=TOPICS_PATH,
+        manual_root=manual_root,
+        settings=settings,
+    )
+    assert report.ok, report.errors
+    assert [record.change_id for record in report.historical_records] == [retired.change_id]
+    assert [record.change_id for record in report.records] == [active.change_id]
+    assert (records_dir / f"{retired_record.intelligence_id}.json").is_file()
+
+    monkeypatch.setattr(radar_compile_module, "COMPETITORS_PATH", config)
+    monkeypatch.setattr(radar_compile_module, "PENDING_DIR", pending_dir)
+    monkeypatch.setattr(radar_compile_module, "RECORDS_DIR", records_dir)
+    monkeypatch.setattr(radar_compile_module, "MANUAL_EVIDENCE_DIR", manual_root)
+    monkeypatch.setattr(radar_compile_module, "RESEARCH_DIR", research_dir)
+    monkeypatch.setattr(radar_compile_module, "REPO_ROOT", tmp_path)
+
+    snapshot = radar_compile_module.compile_radar(settings=settings, write=False)
+    assert all(item.change_id != retired.change_id for item in snapshot.intelligence)
+    assert [item.change_id for item in snapshot.intelligence] == [active.change_id]
+    assert all(pair.url != URL_A for pair in snapshot.before_after)
+    assert any(pair.url == URL_A2 for pair in snapshot.before_after)
+    assert any(source.url == URL_A2 for source in snapshot.competitors[0].tracked_sources)
+
+
+def test_active_url_missing_provenance_remains_current(tmp_path: Path) -> None:
+    config = _write_config(
+        tmp_path,
+        [_competitor("sample-alpha", "alpha.example.com", [URL_A])],
+    )
+    pending_dir = tmp_path / "pending"
+    item = _write_pending(
+        pending_dir,
+        competitor_id="sample-alpha",
+        url=URL_A,
+        snapshot_id="snap-alpha-active",
+        content_hash="alpha-active",
+    )
+    records_dir = tmp_path / "records"
+    _write_record(
+        records_dir,
+        _record(
+            item,
+            item.evidence[-1].evidence_id,
+            include_provenance_url=False,
+        ),
+    )
+
+    report = validate_intelligence(
+        records_dir=records_dir,
+        pending_dir=pending_dir,
+        competitors_path=config,
+        topics_path=TOPICS_PATH,
+        manual_root=tmp_path / "manual",
+    )
+    assert report.ok, report.errors
+    assert [record.change_id for record in report.records] == [item.change_id]
+    assert report.historical_records == []
 
 
 def test_retired_competitor_is_not_detected_or_prepared_and_raw_history_remains(
