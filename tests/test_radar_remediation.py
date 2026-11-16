@@ -215,7 +215,10 @@ def _write_manual(
     return item
 
 
-def test_processed_hash_is_not_redetected_but_real_next_hash_is(tmp_path: Path, monkeypatch) -> None:
+def test_processed_hash_is_not_redetected_but_real_next_hash_is(
+    tmp_path: Path,
+    monkeypatch,
+) -> None:
     settings = _settings(tmp_path, monkeypatch)
     config = _write_config(
         tmp_path,
@@ -366,7 +369,9 @@ def test_evidence_ownership_rejects_cross_competitor_and_wrong_change(
 
     wrong_raw = validate(_record(alpha, alpha_other.evidence[0].evidence_id), "wrong-raw")
     assert not wrong_raw.ok
-    assert any("raw evidence" in error and "belongs to change" in error for error in wrong_raw.errors)
+    assert any(
+        "raw evidence" in error and "belongs to change" in error for error in wrong_raw.errors
+    )
 
     wrong_manual = validate(_record(alpha, alpha_wrong_change.evidence_id), "wrong-manual")
     assert not wrong_manual.ok
@@ -514,9 +519,7 @@ def test_compiler_excludes_retired_competitor_but_keeps_history_files(
     monkeypatch,
 ) -> None:
     data = yaml.safe_load(EXAMPLE_COMPETITORS_PATH.read_text(encoding="utf-8"))
-    data["competitors"] = [
-        row for row in data["competitors"] if row["id"] != "sample-gamma"
-    ]
+    data["competitors"] = [row for row in data["competitors"] if row["id"] != "sample-gamma"]
     config = tmp_path / "competitors-no-gamma.yaml"
     config.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
     monkeypatch.setattr(radar_compile_module, "EXAMPLE_COMPETITORS_PATH", config)
@@ -533,13 +536,9 @@ def test_compiler_excludes_removed_tracked_url_but_keeps_other_sources(
     tmp_path: Path,
     monkeypatch,
 ) -> None:
-    data = copy.deepcopy(
-        yaml.safe_load(EXAMPLE_COMPETITORS_PATH.read_text(encoding="utf-8"))
-    )
+    data = copy.deepcopy(yaml.safe_load(EXAMPLE_COMPETITORS_PATH.read_text(encoding="utf-8")))
     alpha = next(row for row in data["competitors"] if row["id"] == "sample-alpha")
-    alpha["tracked_urls"] = [
-        row for row in alpha["tracked_urls"] if row["url"] != URL_A2
-    ]
+    alpha["tracked_urls"] = [row for row in alpha["tracked_urls"] if row["url"] != URL_A2]
     config = tmp_path / "competitors-no-changelog.yaml"
     config.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
     monkeypatch.setattr(radar_compile_module, "EXAMPLE_COMPETITORS_PATH", config)

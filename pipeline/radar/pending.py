@@ -264,7 +264,8 @@ def run_collect(settings: Settings | None = None, path: Path | None = None) -> C
         ]
         if len(candidates) != len(detected):
             log.info(
-                "radar accepted %d/%d candidate(s) after active-source and processed-state filtering",
+                "radar accepted %d/%d candidate(s) after active-source and "
+                "processed-state filtering",
                 len(candidates),
                 len(detected),
             )
@@ -374,9 +375,7 @@ def run_prepare(
         )
         snaps = _snapshot_rows(wh)
         active_rows = [
-            row
-            for row in rows
-            if is_active_source(active_sources, str(row[1]), str(row[2]))
+            row for row in rows if is_active_source(active_sources, str(row[1]), str(row[2]))
         ]
         result.changes_read = len(active_rows)
         result.ignored_inactive = len(rows) - len(active_rows)

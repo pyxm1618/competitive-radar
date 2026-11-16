@@ -61,9 +61,7 @@ def load_manual_evidence(root: Path | None = None) -> list[ManualEvidence]:
     for meta in sorted(directory.glob("*/metadata.json")):
         item = ManualEvidence.model_validate_json(meta.read_text(encoding="utf-8"))
         missing = [
-            name
-            for name in item.files
-            if not _contained_asset_path(meta.parent, name).is_file()
+            name for name in item.files if not _contained_asset_path(meta.parent, name).is_file()
         ]
         if missing:
             log.warning("%s references missing asset(s): %s", item.evidence_id, ", ".join(missing))
