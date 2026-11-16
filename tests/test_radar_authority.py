@@ -47,12 +47,19 @@ FORBIDDEN_RUNTIME = (
 )
 
 
-def test_competitor_authority_is_intentionally_empty() -> None:
+def test_competitor_authority_contains_real_onboarding_set() -> None:
     data = yaml.safe_load(COMPETITORS_PATH.read_text(encoding="utf-8"))
-    assert data["competitors"] == []
+    competitors = data["competitors"]
+    assert len(competitors) == 55
+    assert sum(c["tier"] == 1 for c in competitors) == 34
+    assert sum(c["tier"] == 2 for c in competitors) == 21
+    ids = [c["id"] for c in competitors]
+    assert len(ids) == len(set(ids))
+    assert all(c["tracked_urls"] for c in competitors)
+    assert sum(len(c["tracked_urls"]) for c in competitors) == 102
     header = COMPETITORS_PATH.read_text(encoding="utf-8")
     assert "AUTHORITY" in header
-    assert "intentionally EMPTY" in header
+    assert "confirmed 55-object onboarding list" in header
 
 
 def test_topic_authority_is_single_and_complete() -> None:
