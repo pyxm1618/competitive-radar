@@ -141,3 +141,9 @@ def test_committed_static_artifact_matches_the_frontend_contract() -> None:
     assert snapshot.before_after == []
     assert snapshot.weekly.total_changes == 0
     assert snapshot.weekly.manual_research_needed == 11
+
+    compiled = compile_radar(demo=False, write=False)
+    assert snapshot.summary == compiled.summary
+    assert snapshot.topics == compiled.topics
+    assert snapshot.competitors == compiled.competitors
+    assert snapshot.manual_research == compiled.manual_research
