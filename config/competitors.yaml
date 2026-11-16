@@ -326,11 +326,6 @@
       ],
       "tracked_urls": [
         {
-          "url": "https://link.springer.com/article/10.1007/s10803-026-07519-6",
-          "source_type": "static",
-          "signal_hint": "other"
-        },
-        {
           "url": "https://pubmed.ncbi.nlm.nih.gov/42726183/",
           "source_type": "static",
           "signal_hint": "other"
@@ -392,12 +387,7 @@
       ],
       "tracked_urls": [
         {
-          "url": "https://edu.people.com.cn/n1/2026/0910/c1006-40796173.html",
-          "source_type": "static",
-          "signal_hint": "press_release"
-        },
-        {
-          "url": "https://finance.people.com.cn/n1/2025/0716/c1004-40522638.html",
+          "url": "https://sklccc.com.cn/437288/index.html",
           "source_type": "static",
           "signal_hint": "press_release"
         }
@@ -525,11 +515,6 @@
         },
         {
           "url": "https://www.mightier.com/faqs/",
-          "source_type": "static",
-          "signal_hint": "other"
-        },
-        {
-          "url": "https://support.mightier.com/hc/en-us/articles/7785750508443-Overview-of-the-Mightier-App",
           "source_type": "static",
           "signal_hint": "other"
         }

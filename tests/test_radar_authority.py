@@ -56,7 +56,7 @@ def test_competitor_authority_contains_real_onboarding_set() -> None:
     ids = [c["id"] for c in competitors]
     assert len(ids) == len(set(ids))
     assert all(c["tracked_urls"] for c in competitors)
-    assert sum(len(c["tracked_urls"]) for c in competitors) == 102
+    assert sum(len(c["tracked_urls"]) for c in competitors) == 99
     header = COMPETITORS_PATH.read_text(encoding="utf-8")
     assert "AUTHORITY" in header
     assert "confirmed 55-object onboarding list" in header

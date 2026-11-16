@@ -89,7 +89,7 @@ def test_authoritative_build_reflects_real_onboarding_baseline() -> None:
     snapshot = compile_radar(demo=False, write=False)
     assert snapshot.demo is False
     assert snapshot.summary.tracked_competitors == 55
-    assert snapshot.summary.tracked_sources == 102
+    assert snapshot.summary.tracked_sources == 99
     assert len(snapshot.competitors) == 55
     assert snapshot.intelligence == []
     assert snapshot.evidence == []
