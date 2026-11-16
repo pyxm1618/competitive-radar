@@ -1,0 +1,226 @@
+{
+  "$defs": {
+    "Confidence": {
+      "description": "How well the available evidence supports the conclusion.",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ],
+      "title": "Confidence",
+      "type": "string"
+    },
+    "Decision": {
+      "enum": [
+        "act",
+        "investigate",
+        "watch",
+        "ignore"
+      ],
+      "title": "Decision",
+      "type": "string"
+    },
+    "EvidenceRef": {
+      "properties": {
+        "evidence_id": {
+          "title": "Evidence Id",
+          "type": "string"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        },
+        "role": {
+          "default": "supporting",
+          "enum": [
+            "before",
+            "after",
+            "supporting"
+          ],
+          "title": "Role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "evidence_id"
+      ],
+      "title": "EvidenceRef",
+      "type": "object"
+    },
+    "HumanReviewStatus": {
+      "enum": [
+        "unreviewed",
+        "reviewed",
+        "disputed",
+        "corrected"
+      ],
+      "title": "HumanReviewStatus",
+      "type": "string"
+    },
+    "Impact": {
+      "description": "How much the change would matter for a product decision IF it holds.",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ],
+      "title": "Impact",
+      "type": "string"
+    },
+    "Relevance": {
+      "description": "Closeness to Xiaoshuyin's current product questions.",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ],
+      "title": "Relevance",
+      "type": "string"
+    }
+  },
+  "description": "The single authoritative external-AI intelligence format.",
+  "properties": {
+    "analyst": {
+      "default": "antigravity",
+      "title": "Analyst",
+      "type": "string"
+    },
+    "change_id": {
+      "pattern": "^chg-[0-9a-f]{24}$",
+      "title": "Change Id",
+      "type": "string"
+    },
+    "change_type": {
+      "enum": [
+        "new",
+        "updated",
+        "removed"
+      ],
+      "title": "Change Type",
+      "type": "string"
+    },
+    "competitor_id": {
+      "title": "Competitor Id",
+      "type": "string"
+    },
+    "confidence": {
+      "$ref": "#/$defs/Confidence"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "date": {
+      "format": "date",
+      "title": "Date",
+      "type": "string"
+    },
+    "decision": {
+      "$ref": "#/$defs/Decision"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/EvidenceRef"
+      },
+      "minItems": 1,
+      "title": "Evidence",
+      "type": "array"
+    },
+    "human_review_status": {
+      "$ref": "#/$defs/HumanReviewStatus",
+      "default": "unreviewed"
+    },
+    "impact": {
+      "$ref": "#/$defs/Impact"
+    },
+    "intelligence_id": {
+      "pattern": "^int-[0-9a-f]{24}$",
+      "title": "Intelligence Id",
+      "type": "string"
+    },
+    "mechanism": {
+      "maxLength": 1200,
+      "minLength": 1,
+      "title": "Mechanism",
+      "type": "string"
+    },
+    "notes": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Notes"
+    },
+    "provenance": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Provenance",
+      "type": "object"
+    },
+    "relevance": {
+      "$ref": "#/$defs/Relevance",
+      "default": "medium"
+    },
+    "schema_version": {
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "summary": {
+      "maxLength": 600,
+      "minLength": 1,
+      "title": "Summary",
+      "type": "string"
+    },
+    "topic_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Topic Ids",
+      "type": "array"
+    },
+    "why_it_matters": {
+      "maxLength": 1200,
+      "minLength": 1,
+      "title": "Why It Matters",
+      "type": "string"
+    },
+    "xiaoshuyin_relevance": {
+      "maxLength": 1200,
+      "minLength": 1,
+      "title": "Xiaoshuyin Relevance",
+      "type": "string"
+    }
+  },
+  "required": [
+    "intelligence_id",
+    "change_id",
+    "competitor_id",
+    "date",
+    "summary",
+    "change_type",
+    "impact",
+    "confidence",
+    "decision",
+    "xiaoshuyin_relevance",
+    "mechanism",
+    "why_it_matters",
+    "evidence"
+  ],
+  "title": "IntelligenceRecord",
+  "type": "object"
+}

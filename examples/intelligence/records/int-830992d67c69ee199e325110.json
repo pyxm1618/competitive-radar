@@ -1,0 +1,37 @@
+{
+  "analyst": "sample-fixture-generator",
+  "change_id": "chg-1d272a6da16a863daaf31266",
+  "change_type": "updated",
+  "competitor_id": "sample-alpha",
+  "confidence": "medium",
+  "created_at": "2026-11-12T12:00:00Z",
+  "date": "2026-11-12",
+  "decision": "investigate",
+  "evidence": [
+    {
+      "evidence_id": "ev-384f1f3b9451bf68e740",
+      "note": null,
+      "role": "after"
+    }
+  ],
+  "human_review_status": "unreviewed",
+  "impact": "medium",
+  "intelligence_id": "int-830992d67c69ee199e325110",
+  "mechanism": "SAMPLE — Retention is implemented as recurring check-in prompts tied to earlier actions.",
+  "notes": null,
+  "provenance": {
+    "pending_file": "examples/intelligence/pending/chg-1d272a6da16a863daaf31266.json",
+    "snapshot_after": "snap-943cb32bff026363a0a74951",
+    "snapshot_before": "snap-3555bffe043e68441d451116",
+    "url": "https://alpha.example.com/changelog"
+  },
+  "relevance": "high",
+  "schema_version": 1,
+  "summary": "SAMPLE — Changelog now mentions long-term tracking and follow-up reminders.",
+  "topic_ids": [
+    "tracking",
+    "follow-up"
+  ],
+  "why_it_matters": "SAMPLE — Only a changelog line is available; the actual flow still needs manual research.",
+  "xiaoshuyin_relevance": "SAMPLE — Follow-up and tracking are core Xiaoshuyin capability areas."
+}

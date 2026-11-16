@@ -1,175 +1,286 @@
-# compete - Competitive Intelligence Platform
+# Xiaoshuyin Competitive Radar V1 (小树荫竞品雷达)
 
-**Watch every move your competitors make.** compete runs scheduled agents over a
-configurable list of competitors (websites, blogs, pricing pages, news, job
-postings), extracts **structured signals** with an LLM, warehouses everything in
-**DuckDB**, detects meaningful changes, and serves a polished, responsive
-dashboard with auto-generated weekly reports.
+An internal product-research tool for the **Xiaoshuyin (小树荫)** product owner.
+It watches competitor pages, detects changes **deterministically**, and — via a
+human-triggered external Antigravity agent — turns those already-detected changes
+into short intelligence records that answer one question: *值得你看的变化?* (is
+this change worth your attention?).
 
-### ➜ [**Live demo**](https://compete.yerradouani.me) &nbsp;·&nbsp; [Docs](https://compete.yerradouani.me/docs) &nbsp;·&nbsp; [Write-up](https://yerradouani.me)
+This repository is a **thin V1 layer on top of upstream
+[`yassnemo/compete`](https://github.com/yassnemo/compete)** (MIT). The guiding
+principle is **reuse first, modify minimally**. The real ~55-competitor list has
+**not** been supplied, so the competitor authority `config/competitors.yaml` is
+intentionally empty in V1. No paid LLM API is used.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-lime.svg)](LICENSE)
-[![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](web/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-typed-009688?logo=fastapi&logoColor=white)](api/)
-[![DuckDB](https://img.shields.io/badge/DuckDB-warehouse-FFF000?logo=duckdb&logoColor=black)](warehouse/)
-[![dbt](https://img.shields.io/badge/dbt-staging→marts-FF694B?logo=dbt&logoColor=white)](warehouse/)
-[![Deploy: static $0](https://img.shields.io/badge/deploy-static%20%240-brightgreen)](docs/DEPLOYMENT.md)
+- Target repo: `pyxm1618/competitive-radar`
+- Feature branch: `feat/competitive-radar-v1`
 
-The public demo is fully **server-less**: every API response is baked to static
-JSON and served from Vercel at **$0** (see
-[ADR 0004](docs/adr/0004-static-snapshot-deploy.md)). A weekly GitHub Action
-refreshes the data. Config-driven collection (static/dynamic/RSS/jobs),
-snapshot-diff change detection, provider-agnostic LLM extraction, a dbt
-warehouse (staging → marts + tests), a typed FastAPI, a light/dark Next.js
-dashboard, and weekly markdown→PDF reports - all on free/local tooling.
+## What this is
 
-## Screenshots
+- A **monitoring + intelligence pipeline**: collect public competitor pages,
+  store content-addressed snapshots, diff snapshots deterministically, and queue
+  detected changes for analysis.
+- An **intelligence workflow**, not an autonomous agent: AI (Antigravity) explains
+  changes that the pipeline already detected; it never decides whether a change
+  happened.
+- A **read-only frontend** that renders compiled intelligence as a radar, topic
+  view, competitor view, and evidence view.
+- An **internal tool** for product design decisions, not a Xiaoshuyin product
+  codebase, a general competitor directory, or a BI dashboard.
 
-| Overview (dark) | Competitor detail (dark) |
-|---|---|
-| ![Overview](docs/screenshots/overview-dark.png) | ![Competitor](docs/screenshots/competitor-dark.png) |
+The `radar` CLI is a thin wrapper over the upstream pipeline. `radar collect`,
+`radar prepare`, and `radar update` never call a model. Analysis is performed by
+Antigravity, not by the CLI.
 
-| Changes (light) | Mobile (dark) |
-|---|---|
-| ![Changes](docs/screenshots/changes-light.png) | <img src="docs/screenshots/overview-mobile-dark.png" width="280" /> |
+## Architecture (V1 flow)
 
-More in [`docs/screenshots/`](docs/screenshots/) (reports, settings, light/dark).
+```
+Collection → Snapshot → Diff → Pending Intelligence Queue → Antigravity → Intelligence Output → Frontend
 
-## Tech stack
+config/competitors.yaml  (competitor authority; intentionally empty in V1)
+config/topics.yaml       (topic taxonomy authority; 13 topics)
+        |
+        v
+[Collection]   radar collect
+        |      httpx/static, Playwright/dynamic, RSS, jobs  (upstream collectors)
+        v
+[Snapshot]     raw.raw_pages (DuckDB) + data/raw/*.parquet   (upstream raw layer)
+        |
+        v
+[Diff]         deterministic comparison between collected snapshots
+               (upstream pipeline/detect/change.py)  -> detected changes
+        |
+        v
+[Pending Intelligence Queue]   radar prepare
+               data/intelligence/pending/<change_id>.json
+        |      .------------------------------.  (human-triggered hand-off;
+        |      | no model is called by the CLI |   no AI in GitHub Actions)
+        v      '------------------------------'
+[Antigravity]  EXTERNAL intelligence agent, invoked by a human
+               reads: pending + evidence + config/* + context/xiaoshuyin.md
+        |
+        v
+[Intelligence Output]   data/intelligence/records/<intelligence_id>.json
+               (one format only; radar validate checks it)
+        |
+        v
+[Frontend]     radar build -> web/public/radar-static/radar.json
+               -> Next.js (Renderer, read-only) -> Vercel
+```
 
-| Layer        | Tooling |
-|--------------|---------|
-| Collection   | Python, httpx + selectolax, trafilatura, Playwright, feedparser |
-| LLM extraction | provider-agnostic (Gemini Flash default · Groq · Ollama · mock), `instructor` structured outputs |
-| Storage      | DuckDB (file-based warehouse) + Parquet raw layer |
-| Transform    | dbt-core + dbt-duckdb (staging → marts, tests, docs) |
-| API          | FastAPI (typed, OpenAPI) |
-| Frontend     | Next.js + TypeScript + Tailwind + shadcn/ui + Tremor |
+The integration is a **deterministic file protocol**. Antigravity is an external
+intelligence agent, **not** a web-app runtime dependency.
 
-Optimized for **free / open-source** tooling throughout.
+## Authority (single sources)
 
-## Quickstart
+| Concern | Single source of truth | Exact path |
+|---|---|---|
+| Competitors | `config/competitors.yaml` (intentionally `competitors: []` in V1) | `config/competitors.yaml` |
+| Topic taxonomy | `config/topics.yaml` (13 topics) | `config/topics.yaml` |
+| Raw evidence | upstream `raw.raw_pages` (DuckDB) + `data/raw/*.parquet` | no second raw-evidence DB |
+| Change detection | deterministic diff between snapshots (upstream `pipeline/detect/change.py`) | AI cannot decide a change happened |
+| Pending queue | `data/intelligence/pending/<change_id>.json` | one file per detected change |
+| Intelligence | `data/intelligence/records/<intelligence_id>.json` | ONE format only |
+| Manual research queue | `data/intelligence/research/<request_id>.json` | created when evidence is insufficient |
+| Weekly pulse | `data/intelligence/weekly/<week_start>.json` | file-based |
+| JSON Schemas | `data/intelligence/schema/*.schema.json` | validation contract |
+| Manual evidence | `evidence/manual/<evidence_id>/metadata.json` + asset files in the same folder | read-only input |
+| Compiled frontend artifact | `web/public/radar-static/radar.json` | built by `radar build` |
+| Xiaoshuyin context | `context/xiaoshuyin.md` | relevance guardrails |
 
-Requires [`uv`](https://docs.astral.sh/uv/) (handles Python 3.12 automatically).
+See [docs/AUTHORITY.md](docs/AUTHORITY.md) for the full authority model and the
+prohibited list.
+
+## How to install
+
+Requires [`uv`](https://docs.astral.sh/uv/) (manages Python 3.12) and Node.js for
+the web app.
 
 ```bash
-# 1. Install dependencies into a local venv (all extras for the full demo)
 uv sync --extra dev --extra dbt --extra api --extra report
-
-# 2. Configure environment
-cp .env.example .env            # Windows: copy .env.example .env
-
-# 3. Initialize the warehouse + mirror competitor config
-uv run compete init-db
-uv run compete sync-competitors
-
-# 4. Collect (fetch tracked URLs → store snapshots), then inspect
-uv run compete collect
-uv run compete status
-
-# 5. Run the test suite
-uv run pytest
+uv run playwright install chromium      # for the dynamic collector
+cp .env.example .env
+cd web && npm install
 ```
 
-No LLM key is needed for Phases 0-1. Extraction (Phase 2) uses Gemini Flash by
-default; set `GOOGLE_API_KEY` in `.env`, or switch `COMPETE_LLM_PROVIDER` to
-`groq` / `ollama` / `mock`.
+No model key is needed. `COMPETE_LLM_PROVIDER` defaults to `mock`; the upstream
+Gemini/Groq/Ollama/mock extraction code is retained for compatibility only and is
+not the default path.
 
-## One-command demo (no keys)
-
-Seed curated, realistic data (5 competitors, signals across all types, pricing
-history, hiring, weekly reports), build the marts, and start **both** the API
-and the dashboard - no API key or live scraping required:
+## How to collect
 
 ```bash
-uv run python scripts/demo.py        # or: make demo
+radar collect     # sync competitors -> collect -> snapshot -> deterministic diff (no AI)
+radar prepare     # detected changes -> normalize -> generate/update pending queue (no AI)
+radar status      # counts and current state
+radar update      # collect + prepare + build (no AI)
 ```
 
-Then open **http://localhost:3000** (dashboard) and **http://127.0.0.1:8000/docs**
-(API). The script runs `npm install` for the web app on first use.
+`radar collect` and `radar prepare` never call a model. GitHub Actions runs only
+non-AI monitoring (collection, snapshot, diff, pending-queue generation) and must
+never fail for a missing model key. With `config/competitors.yaml` empty,
+collection has no real targets yet.
 
-Prefer the pieces separately:
+## How Antigravity analyzes
+
+Analysis is **human-triggered** in V1; nothing is auto-analyzed on a schedule.
+
+1. Run `radar prepare` to produce `data/intelligence/pending/<change_id>.json`.
+2. Open Antigravity and invoke the workspace skill
+   `competitor-intelligence` (`.agents/skills/competitor-intelligence/SKILL.md`),
+   e.g. via the `analyze-pending` workflow.
+3. The Agent reads the pending queue, raw evidence, `config/competitors.yaml`,
+   `config/topics.yaml`, `context/xiaoshuyin.md`, and (when needed) previous
+   records, then writes **one** intelligence record per `change_id` to
+   `data/intelligence/records/<intelligence_id>.json`.
+4. Run `radar validate` (validates records against
+   `data/intelligence/schema/*.schema.json`) and then `radar build`.
+
+AI explains a change that the deterministic diff already detected; it never
+decides whether a change happened. Impact and Confidence are independent
+judgements. See [docs/ANTIGRAVITY_WORKFLOW.md](docs/ANTIGRAVITY_WORKFLOW.md).
+
+## How to build frontend
 
 ```bash
-uv run python scripts/seed_demo.py --build   # seed + build marts
-uv run compete-api                            # API on :8000
-cd web && npm install && npm run dev          # dashboard on :3000
+radar validate    # validate intelligence records
+radar build       # validate -> dbt build -> static JSON -> frontend build
+radar demo-build  # build compiled JSON from examples/ fixtures only; never writes authority
 ```
 
-Key endpoints: `GET /stats/overview`, `GET /signals`, `GET /changes`,
-`GET /competitors`, `GET /competitors/{id}/pricing-history|hiring|cadence`,
-`GET /reports`, `GET /reports/{id}/pdf`, `POST /pipeline/run`.
+`radar build` produces `web/public/radar-static/radar.json`. The frontend has
+**exactly four first-level entries**: **Radar** (default homepage), **Topics**,
+**Competitors**, **Evidence**. It is a **Renderer**: read-only, no second
+competitor truth, no realtime AI chat.
 
-## Run the real pipeline
+Quality gates: `uv run pytest`, `uv run ruff check pipeline tests api scripts`,
+`uv run black --check pipeline tests api scripts`, `uv run mypy pipeline`,
+`cd warehouse/dbt && dbt build`, `cd web && npm run lint && npm run typecheck && npm run build`.
 
-```bash
-uv run compete run-all                 # sync → collect → extract → dbt → report
-uv run compete run-all -p mock -n 5    # offline (mock LLM), capped for a quick demo
-```
+## How to add competitors
 
-Set `GOOGLE_API_KEY` (Gemini, default) or switch `COMPETE_LLM_PROVIDER` to
-`groq` / `ollama` / `mock`. No key is needed for collection or the `mock` path.
-
-## Add a competitor
-
-Edit `config/competitors.yaml` - no code changes required:
+Edit **`config/competitors.yaml`** — it is the **only** competitor authority, and
+no code changes are required:
 
 ```yaml
 competitors:
   - id: example
-    name: Example Inc
+    name: Example (sample only)
     domain: example.com
-    industry: SaaS
-    tier: 1
+    industry: sample
+    tier: 2
     tracked_urls:
       - url: https://example.com/blog
         source_type: static      # static | dynamic | rss | jobs
-        signal_hint: blog_post
+        signal_hint: other
 ```
 
-Then `uv run compete sync-competitors && uv run compete collect -c example`.
+Then run `radar collect` (the upstream sync is part of `radar collect`).
 
-## Repository layout
+**Important:** In V1 this file is intentionally empty (`competitors: []`). The
+real ~55-competitor list has **not** been supplied. **Do NOT invent, scrape, or
+research competitors to populate it, and do NOT fabricate the 55.** Import the
+authoritative list here in one pass when it is available. A clearly-labelled
+sample fixture at `config/examples/competitors.sample.yaml` is for **tests / demo
+only** and is **not** authoritative.
+
+## How to add manual evidence
+
+Create a folder per evidence item:
 
 ```
-pipeline/    collect · extract (llm + embeddings) · detect · report · storage · transform · cli
-warehouse/   dbt project (staging → marts, tests, docs)
-api/         FastAPI app
-web/         Next.js dashboard
-config/      competitors.yaml (config-driven)
-scripts/     demo · seed_demo · screenshots · inspect_marts
-docs/        ARCHITECTURE · DATA_MODEL · AGENTS · RUNBOOK · DEPLOYMENT · adr/
+evidence/manual/<evidence_id>/
+    metadata.json       # provenance: source, captured_at, description, original URL
+    <asset files>       # e.g. screenshot.png, page.html — same folder
 ```
 
-## Scraping ethics
+Reference the `evidence_id` from the intelligence record's `evidence[]`. Manual
+evidence is read-only input for the Agent; it must never be written to by the
+intelligence workflow, and no AI prose is written into the raw change authority.
 
-Public pages only; honors `robots.txt` (including `Crawl-delay`) by default;
-polite per-host throttling; honest User-Agent; never scrapes behind logins.
+## How to deploy
 
-## Free-tier cost
+**Static-first:** Pipeline → static JSON → Next.js → Vercel.
 
-| Component | Service | Cost |
-|-----------|---------|------|
-| Pipeline schedule | GitHub Actions cron | Free |
-| LLM extraction | Gemini Flash / Groq free tier · Ollama/`mock` local | $0 |
-| Embeddings | local hashing (default) or MiniLM | $0 |
-| Warehouse | DuckDB + Parquet (file) | $0 |
-| API host | none — responses baked to static JSON (or Oracle/Fly.io for live mode) | $0 |
-| Dashboard | Vercel Hobby (static) | $0 |
+`radar build` compiles `web/public/radar-static/radar.json`; the Next.js app reads
+it directly in the browser. No long-running FastAPI server is needed, no API keys
+are required, and there is no backend hosting in the default path. Upstream
+FastAPI remains available for live mode / legacy compatibility only. See
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
-**$0** with default/local providers. The public demo needs no backend at all -
-see [DEPLOYMENT](docs/DEPLOYMENT.md) and [ADR 0004](docs/adr/0004-static-snapshot-deploy.md).
+## No paid LLM API
+
+V1 uses **NO PAID LLM API**. No `OPENAI_API_KEY`, `GOOGLE_API_KEY`,
+`GROQ_API_KEY`, Anthropic API, or any model key is required for the normal
+workflow. Upstream Gemini/Groq/Ollama/mock extraction code is retained for
+compatibility **only** and is **not** the default path; `COMPETE_LLM_PROVIDER`
+now defaults to `mock`. GitHub Actions must never fail for a missing model key.
+
+Antigravity is an external, human-triggered intelligence agent connected by a
+deterministic file protocol — it is not a paid model API dependency of the CLI
+or the web app.
+
+## What was intentionally not built
+
+- A second crawler / collection pipeline (upstream collectors are reused).
+- A second diff engine or a second change-detection authority (upstream
+  `pipeline/detect/change.py` is the only one).
+- A second database or a second raw-evidence store (upstream DuckDB + Parquet is
+  the only one).
+- A second competitor registry, a hardcoded frontend competitor list, or
+  localStorage CRUD as a source of truth.
+- Fully unattended AI analysis (V1 is human-triggered via Antigravity).
+- A realtime AI chat in the frontend.
+- A production long-running FastAPI server (static-first instead).
+- Any paid model API integration for the normal workflow.
+
+## Known limitations
+
+- `config/competitors.yaml` is intentionally empty; the real ~55-competitor list
+  has not been supplied. No collection runs against real competitors until it is
+  populated. Never fabricate it.
+- Intelligence analysis is human-triggered; there is no scheduled auto-analysis.
+- Impact and Confidence are independent human judgements; records carry a
+  `human_review_status` and require human review.
+- The frontend is a read-only renderer; there is no write-through CRUD.
+- Manual evidence, the research queue, and the weekly pulse are file-based, not
+  automated services.
+- Upstream LLM extraction remains for compatibility, not as the default V1 path.
+
+## Upstream attribution
+
+This project is derived from [**`compete`**](https://github.com/yassnemo/compete)
+by **Yassine Erradouani**, released under the **MIT License** (Copyright (c) 2026).
+
+- Upstream repository: https://github.com/yassnemo/compete
+- Baseline commit imported **verbatim**:
+  `ebc32b20c2016282976d2375af5821b530fa66bf`
+  (2026-07-03, *"Round out the dashboard: signals + competitors pages, 404/error
+  pages"*).
+- The original `LICENSE` is kept **UNCHANGED** in the repository root.
+- Substantial portions of this repository are upstream code, not original work
+  from scratch. Retained: the Python collection pipeline (httpx/static,
+  Playwright/dynamic, RSS, jobs), snapshots, deterministic snapshot diff,
+  Parquet raw layer, DuckDB warehouse, dbt staging→marts, static JSON export,
+  Next.js + TypeScript + Tailwind + shadcn/ui, tests, CI patterns, and
+  static/serverless deployment.
+
+See [NOTICE](NOTICE) for the formal attribution notice.
 
 ## Documentation
 
-- [ARCHITECTURE](docs/ARCHITECTURE.md) - system diagram, data flow, component responsibilities
-- [DATA_MODEL](docs/DATA_MODEL.md) - every table, lineage, dbt docs
-- [AGENTS](docs/AGENTS.md) - extraction schema, prompt, retry loop, providers, cost controls
-- [RUNBOOK](docs/RUNBOOK.md) - add a competitor, backfill, fix a scraper, rate limits
-- [DEPLOYMENT](docs/DEPLOYMENT.md) - GitHub Actions, Vercel, API host, env/secrets
-- [ADRs](docs/adr/) - DuckDB vs Postgres · snapshot-diffing · deterministic pipeline · static-snapshot deploy
-- [CONTRIBUTING](CONTRIBUTING.md) - setup and quality gates
+- [ARCHITECTURE](docs/ARCHITECTURE.md) — V1 flow, single monitoring authority, upstream baseline
+- [AUTHORITY](docs/AUTHORITY.md) — the single-source-of-truth model and prohibited list
+- [ANTIGRAVITY_WORKFLOW](docs/ANTIGRAVITY_WORKFLOW.md) — the deterministic file protocol
+- [DATA_MODEL](docs/DATA_MODEL.md) — upstream tables + V1 extension
+- [AGENTS](docs/AGENTS.md) — upstream LLM extraction (compatibility only)
+- [RUNBOOK](docs/RUNBOOK.md) — daily/weekly procedures, upstream baseline
+- [DEPLOYMENT](docs/DEPLOYMENT.md) — static-first path, legacy live mode
+- [ADRs](docs/adr/) — 0001–0004 upstream + 0005 Antigravity file protocol
+- [CONTRIBUTING](CONTRIBUTING.md) — setup and quality gates
+- [NOTICE](NOTICE) — upstream attribution
 
 ## License
 
-Released under the [MIT License](LICENSE).
+The original upstream [MIT License](LICENSE) is retained unchanged in the repo
+root. See [NOTICE](NOTICE).

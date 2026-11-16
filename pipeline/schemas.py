@@ -101,6 +101,10 @@ class CompetitorConfig(BaseModel):
     industry: str | None = None
     tier: int = Field(default=2, ge=1, le=3)
     tracked_urls: list[TrackedURL] = Field(default_factory=list)
+    # Competitive Radar V1 additions (optional, backward compatible with upstream).
+    # why_tracked is editorial context; topic_ids reference config/topics.yaml.
+    why_tracked: str | None = None
+    topic_ids: list[str] = Field(default_factory=list)
 
 
 class CollectionDefaults(BaseModel):

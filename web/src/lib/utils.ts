@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/** Initials from a competitor name, for avatar chips (e.g. "Google DeepMind" -> "GD"). */
+/** Initials from a name, for avatar chips (e.g. "Acme Labs" -> "AL"). */
 export function initials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return "?";

@@ -1,0 +1,22 @@
+{
+  "captured_at": "2026-11-15T10:00:00Z",
+  "captured_by": "sample-fixture-generator",
+  "competitor_id": "sample-beta",
+  "description": "SAMPLE — Placeholder note describing a login-walled iOS onboarding flow that automated collection cannot reach. Not real evidence.",
+  "evidence_id": "evm-sample-ios-onboarding",
+  "evidence_type": "manual_note",
+  "files": [
+    "notes.txt"
+  ],
+  "notes": null,
+  "related_change_id": null,
+  "schema_version": 1,
+  "source_label": "iOS App (manual)",
+  "title": "SAMPLE — Manual note about iOS onboarding",
+  "topic_ids": [
+    "child-participation",
+    "assessment"
+  ],
+  "url": null,
+  "verification_state": "demo_placeholder"
+}

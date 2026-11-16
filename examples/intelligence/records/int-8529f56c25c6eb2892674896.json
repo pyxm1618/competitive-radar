@@ -1,0 +1,42 @@
+{
+  "analyst": "sample-fixture-generator",
+  "change_id": "chg-00651c351294422a7b110363",
+  "change_type": "updated",
+  "competitor_id": "sample-alpha",
+  "confidence": "high",
+  "created_at": "2026-11-10T12:00:00Z",
+  "date": "2026-11-10",
+  "decision": "act",
+  "evidence": [
+    {
+      "evidence_id": "ev-64f9b7e1742f76e712f6",
+      "note": null,
+      "role": "before"
+    },
+    {
+      "evidence_id": "ev-39ca0bf9e6e3f660fec2",
+      "note": null,
+      "role": "after"
+    }
+  ],
+  "human_review_status": "unreviewed",
+  "impact": "high",
+  "intelligence_id": "int-8529f56c25c6eb2892674896",
+  "mechanism": "SAMPLE — Conversation output is converted into a sequenced, time-boxed plan instead of a free-form answer.",
+  "notes": null,
+  "provenance": {
+    "pending_file": "examples/intelligence/pending/chg-00651c351294422a7b110363.json",
+    "snapshot_after": "snap-d2d37201f2c1e30a72273be2",
+    "snapshot_before": "snap-c923965e1453c19047d6c90d",
+    "url": "https://alpha.example.com/home"
+  },
+  "relevance": "high",
+  "schema_version": 1,
+  "summary": "SAMPLE — Added a staged action plan after the AI consultation.",
+  "topic_ids": [
+    "ai-conversation",
+    "action-plan"
+  ],
+  "why_it_matters": "SAMPLE — Shows one concrete way to move from dialogue to an executable family plan.",
+  "xiaoshuyin_relevance": "SAMPLE — Directly matches the assessment-to-action-plan chain Xiaoshuyin is exploring."
+}

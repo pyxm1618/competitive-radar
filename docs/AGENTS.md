@@ -1,5 +1,28 @@
 # Agents & Extraction
 
+> ## ⚠️ V1 note — read this first
+>
+> This document describes the **upstream `compete` LLM extraction** step
+> (Gemini / Groq / Ollama / `mock`). In **Xiaoshuyin Competitive Radar V1** that
+> code is **retained for compatibility only** and is **NOT the default workflow**.
+>
+> - **V1 uses NO PAID LLM API.** No `OPENAI_API_KEY`, `GOOGLE_API_KEY`,
+>   `GROQ_API_KEY`, Anthropic API, or any model key is required for the normal
+>   workflow. `COMPETE_LLM_PROVIDER` now defaults to `mock`.
+> - The default V1 path is the **no-key Antigravity file protocol**: the
+>   deterministic pipeline detects changes and writes a pending queue; a
+>   human-triggered external Antigravity agent explains those already-detected
+>   changes and writes intelligence records. AI never decides whether a change
+>   happened.
+> - `radar collect` / `radar prepare` never call a model; GitHub Actions runs
+>   only non-AI monitoring and must never fail for a missing model key.
+>
+> See **[docs/ANTIGRAVITY_WORKFLOW.md](./ANTIGRAVITY_WORKFLOW.md)** for the full
+> protocol and
+> **[.agents/skills/competitor-intelligence/SKILL.md](../.agents/skills/competitor-intelligence/SKILL.md)**
+> for the intelligence skill. The rest of this document is the upstream
+> baseline, kept intact for legacy / compatibility reference.
+
 `compete` is deliberately **not** an autonomous agent (see ADR 0003). The only
 LLM-driven step is **structured extraction**: turning a piece of already-known-
 changed web content into one validated `Signal`. This document is the contract

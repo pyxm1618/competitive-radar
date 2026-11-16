@@ -33,9 +33,11 @@ class Settings(BaseSettings):
         default=REPO_ROOT / "data" / "compete.duckdb", alias="COMPETE_DUCKDB_PATH"
     )
 
-    # LLM
-    llm_provider: str = Field(default="gemini", alias="COMPETE_LLM_PROVIDER")
-    llm_model: str = Field(default="gemini-1.5-flash", alias="COMPETE_LLM_MODEL")
+    # LLM - upstream providers are retained for compatibility ONLY.
+    # Competitive Radar V1 defaults to the no-key path: analysis is performed by
+    # the external Antigravity agent via the file protocol, never by a paid API.
+    llm_provider: str = Field(default="mock", alias="COMPETE_LLM_PROVIDER")
+    llm_model: str = Field(default="mock", alias="COMPETE_LLM_MODEL")
     google_api_key: str | None = Field(default=None, alias="GOOGLE_API_KEY")
     groq_api_key: str | None = Field(default=None, alias="GROQ_API_KEY")
     ollama_base_url: str = Field(default="http://localhost:11434/v1", alias="OLLAMA_BASE_URL")
@@ -87,6 +89,11 @@ class Settings(BaseSettings):
         self.duckdb_path.parent.mkdir(parents=True, exist_ok=True)
         (self.data_dir / "raw").mkdir(parents=True, exist_ok=True)
         (self.data_dir / "reports").mkdir(parents=True, exist_ok=True)
+        # Competitive Radar V1: authoritative external-AI file protocol dirs.
+        intel = self.data_dir / "intelligence"
+        for name in ("pending", "records", "research", "weekly", "schema"):
+            (intel / name).mkdir(parents=True, exist_ok=True)
+        (REPO_ROOT / "evidence" / "manual").mkdir(parents=True, exist_ok=True)
 
 
 @lru_cache(maxsize=1)

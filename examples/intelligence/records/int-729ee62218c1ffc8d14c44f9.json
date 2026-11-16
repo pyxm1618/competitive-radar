@@ -1,0 +1,37 @@
+{
+  "analyst": "sample-fixture-generator",
+  "change_id": "chg-0b79263b4c5ea1d7bac8c9b2",
+  "change_type": "new",
+  "competitor_id": "sample-beta",
+  "confidence": "low",
+  "created_at": "2026-11-14T12:00:00Z",
+  "date": "2026-11-14",
+  "decision": "investigate",
+  "evidence": [
+    {
+      "evidence_id": "ev-2837f1199c6c5ec3fd7f",
+      "note": null,
+      "role": "after"
+    }
+  ],
+  "human_review_status": "unreviewed",
+  "impact": "high",
+  "intelligence_id": "int-729ee62218c1ffc8d14c44f9",
+  "mechanism": "SAMPLE — One plan is split into role-specific views with a shared progress state.",
+  "notes": null,
+  "provenance": {
+    "pending_file": "examples/intelligence/pending/chg-0b79263b4c5ea1d7bac8c9b2.json",
+    "snapshot_after": "snap-d815099a918bae1c91195855",
+    "snapshot_before": "",
+    "url": "https://beta.example.com/features"
+  },
+  "relevance": "medium",
+  "schema_version": 1,
+  "summary": "SAMPLE — Shared family tasks assign separate steps to parents and child.",
+  "topic_ids": [
+    "family-collaboration",
+    "child-participation"
+  ],
+  "why_it_matters": "SAMPLE — High potential impact, but only a marketing page was captured. IMPACT HIGH / CONFIDENCE LOW is intentional.",
+  "xiaoshuyin_relevance": "SAMPLE — Parent-child collaboration is a Xiaoshuyin design question."
+}

@@ -1,58 +1,38 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Space_Grotesk, Instrument_Serif } from "next/font/google";
 
 import { Providers } from "@/components/providers";
+import { AppShell } from "@/components/radar/app-shell";
+import { getRadarData } from "@/lib/radar-data";
 import "./globals.css";
 
-const sans = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
-const serif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-serif",
-  display: "swap",
-});
-
-// Absolute base for canonical + OG/Twitter URLs. Override per-deploy with
-// NEXT_PUBLIC_SITE_URL (set in Vercel to the real domain); the fallback is the
-// intended production URL so shares still resolve if the env var is missing.
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://compete.yerradouani.me";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
   title: {
-    default: "compete — Competitive Intelligence, on autopilot",
-    template: "%s · compete",
+    default: "Xiaoshuyin Competitive Radar",
+    template: "%s · Xiaoshuyin Competitive Radar",
   },
   description:
-    "Track every move your competitors make. compete collects, extracts, and ranks meaningful signals - pricing, hiring, launches, messaging - into one calm dashboard.",
+    "A static, read-only renderer of compiled competitive intelligence: tracked competitors, topics, detected changes, raw evidence and AI interpretation.",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
-      { url: "/compete-logo1.svg", type: "image/svg+xml" },
+      { url: "/radar-logo.svg", type: "image/svg+xml" },
     ],
     shortcut: "/favicon.ico",
-    apple: "/compete-logo1.svg",
-  },
-  openGraph: {
-    title: "compete — Competitive Intelligence, on autopilot",
-    description:
-      "Track every move your competitors make. Pricing, hiring, launches, messaging - ranked and explained.",
-    type: "website",
   },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+  const data = getRadarData();
+
   return (
-    <html lang="en" suppressHydrationWarning className={`${sans.variable} ${serif.variable}`}>
+    <html lang="en" suppressHydrationWarning>
       <body className="font-sans">
-        <Providers>{children}</Providers>
+        <Providers>
+          <AppShell generatedAt={data.generated_at} demo={data.demo}>
+            {children}
+          </AppShell>
+        </Providers>
       </body>
     </html>
   );

@@ -60,6 +60,7 @@ dev = [
 [project.scripts]
 compete = "pipeline.cli:app"
 compete-api = "api.main:main"
+radar = "pipeline.radar_cli:app"
 
 [build-system]
 requires = ["hatchling"]
@@ -90,6 +91,21 @@ warn_unused_ignores = true
 warn_redundant_casts = true
 ignore_missing_imports = true
 plugins = ["pydantic.mypy"]
+
+# Competitive Radar V1: typecheck OUR 35 source files, not the (very large,
+# partly typed) third-party packages upstream imports. Without these overrides
+# mypy >=1.19 exhausts memory while following `openai` / `google` / `playwright`
+# type stubs. Project code is still fully checked.
+[[tool.mypy.overrides]]
+module = [
+    "instructor.*", "google.*", "groq.*", "openai.*",
+    "trafilatura.*", "selectolax.*", "feedparser.*", "duckdb.*",
+    "pyarrow.*", "fpdf.*", "dbt.*", "fastapi.*", "starlette.*", "uvicorn.*",
+    "rich.*", "typer.*", "yaml.*", "tenacity.*", "pydantic.*", "pydantic_settings.*",
+]
+follow_imports = "skip"
+follow_imports_for_stubs = true
+ignore_errors = true
 
 [tool.pytest.ini_options]
 addopts = "-q"

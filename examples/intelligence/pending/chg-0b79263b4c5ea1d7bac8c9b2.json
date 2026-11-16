@@ -1,0 +1,41 @@
+{
+  "after_snapshot": {
+    "content_hash": "c8570512d966e1be3678dbaf",
+    "extract": "SAMPLE — Shared family tasks: parents and child each see their own steps.",
+    "fetched_at": "2026-11-14T09:00:00Z",
+    "snapshot_id": "snap-d815099a918bae1c91195855",
+    "source_type": "static",
+    "url": "https://beta.example.com/features"
+  },
+  "analysis_status": "pending",
+  "before_snapshot": null,
+  "change_id": "chg-0b79263b4c5ea1d7bac8c9b2",
+  "change_type": "new",
+  "competitor_id": "sample-beta",
+  "detected_at": "2026-11-14T09:00:00Z",
+  "diff": "--- before\n+++ after\n-(no prior snapshot)\n+SAMPLE — Shared family tasks: parents and child each see their own steps.",
+  "evidence": [
+    {
+      "evidence_id": "ev-2837f1199c6c5ec3fd7f",
+      "file_path": null,
+      "kind": "raw",
+      "note": null,
+      "snapshot_ref": "snap-d815099a918bae1c91195855",
+      "title": "SAMPLE — After snapshot: https://beta.example.com/features",
+      "type": "snapshot_after",
+      "url": "https://beta.example.com/features"
+    }
+  ],
+  "provenance": {
+    "change_authority": "SAMPLE deterministic snapshot diff",
+    "competitor_authority": "config/examples/competitors.sample.yaml",
+    "diff_engine": "pipeline/detect/change.py",
+    "raw_evidence_table": "raw.raw_pages (SAMPLE reference)",
+    "snapshot_after": "snap-d815099a918bae1c91195855",
+    "snapshot_before": ""
+  },
+  "schema_version": 1,
+  "source_id": "src-57e895bfa0261d0d",
+  "source_type": "static",
+  "url": "https://beta.example.com/features"
+}

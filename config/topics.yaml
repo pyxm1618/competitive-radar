@@ -1,0 +1,75 @@
+# ============================================================
+# TOPIC TAXONOMY AUTHORITY — config/topics.yaml
+# ============================================================
+# The ONLY authoritative source for Xiaoshuyin product-capability topics.
+# This is a taxonomy, not a permanently frozen classification.
+# Intelligence records may only reference ids listed here.
+# ============================================================
+
+schema_version: 1
+
+topics:
+  - id: problem-discovery
+    label: Problem discovery
+    description: How a product helps a family discover and name the problem they are facing.
+    keywords: [discovery, intake, triage, screening]
+
+  - id: assessment
+    label: Assessment
+    description: Structured assessment, scales, questionnaires and intake evaluation.
+    keywords: [assessment, scale, questionnaire, evaluation]
+
+  - id: diagnosis
+    label: Diagnosis / formulation
+    description: Turning assessment signals into a formulation or diagnostic conclusion.
+    keywords: [diagnosis, formulation, case conceptualization]
+
+  - id: ai-conversation
+    label: AI conversation
+    description: Conversational AI used as the primary interaction surface with a family.
+    keywords: [chatbot, assistant, llm, conversational]
+
+  - id: action-plan
+    label: Action plan
+    description: Generating concrete, sequenced actions from an assessment or formulation.
+    keywords: [plan, recommendations, steps, intervention]
+
+  - id: family-collaboration
+    label: Family collaboration
+    description: Coordination between parents, caregivers and other family members.
+    keywords: [family, shared, collaboration, caregiver]
+
+  - id: child-participation
+    label: Child participation
+    description: How the child themselves participates in the process.
+    keywords: [child, kid, youth, participation]
+
+  - id: tracking
+    label: Tracking
+    description: Ongoing logging of behaviour, mood, tasks or outcomes over time.
+    keywords: [tracking, logging, journal, streak]
+
+  - id: follow-up
+    label: Follow-up
+    description: Re-engagement, check-ins and continuation after an initial plan.
+    keywords: [follow-up, check-in, reminder, relapse]
+
+  - id: reflection
+    label: Reflection
+    description: Structured reflection on what happened and what changed.
+    keywords: [reflection, review, retrospective, insight]
+
+  - id: report
+    label: Report
+    description: Produced artefacts, summaries and shareable reports.
+    keywords: [report, summary, pdf, export]
+
+  - id: expert-service
+    label: Expert service
+    description: Human professional involvement, referral and service delivery.
+    keywords: [therapist, counsellor, consultant, human support]
+
+  - id: monetization
+    label: Monetization
+    description: Pricing, packaging, subscription and commercialization mechanics.
+    keywords: [pricing, subscription, paywall, plan]
