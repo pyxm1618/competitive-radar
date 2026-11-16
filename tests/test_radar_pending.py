@@ -238,9 +238,7 @@ def test_fresh_baseline_then_identical_then_real_change(tmp_path: Path, monkeypa
     assert third.detected_changes == 1
 
     wh = Warehouse.from_settings(settings)
-    rows = wh.query(
-        "SELECT change_type, prev_hash, new_hash FROM raw.changes ORDER BY detected_at"
-    )
+    rows = wh.query("SELECT change_type, prev_hash, new_hash FROM raw.changes ORDER BY detected_at")
     wh.close()
     assert rows == [("updated", "hash-baseline", "hash-changed")]
 
