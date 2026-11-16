@@ -40,6 +40,65 @@ EXPECTED_TOPICS = {
     "monetization",
 }
 
+
+EXPECTED_COMPETITOR_IDENTITIES: set[tuple[str, str, int]] = {
+    ("zhixin-huiyu", "知心慧语", 1),
+    ("jiachangtang", "家长糖", 1),
+    ("trustparent", "TrustParent", 1),
+    ("rice-ai", "RICE AI / 大米和小米", 1),
+    ("little-otter", "Little Otter", 1),
+    ("bend-health", "Bend Health", 1),
+    ("sylva", "Sylva", 1),
+    ("spring-health-guide", "Spring Health / Guide", 1),
+    ("kairoo", "Kairoo", 1),
+    ("innowell", "Innowell", 1),
+    ("one-sec", "one sec", 1),
+    ("dynamicare-health", "DynamiCare Health", 1),
+    ("paicoach", "PaiCoach", 1),
+    ("asd-super-agent", "ASD Super Agent", 1),
+    ("guji", "谷积", 1),
+    ("zizai-mental-health-ai", "“自在”心理疏导大模型", 1),
+    ("yangguang-duoduo", "阳光朵朵 / 花都案例", 1),
+    ("xiaodu-ai-care", "小度 AI 看护 / 家庭智能体", 1),
+    ("brightline", "Brightline", 1),
+    ("good-inside", "Good Inside", 1),
+    ("mightier", "Mightier", 1),
+    ("daily-growth", "Daily Growth", 1),
+    ("lumi-nova", "Lumi Nova", 1),
+    ("kinspire", "Kinspire / Precision Parenting", 1),
+    ("neurture", "Neurture Studio", 1),
+    ("understanding-zoe", "Understanding Zoe", 1),
+    ("mindler-sandbox", "Mindler / The Sandbox", 1),
+    ("sword-health", "Sword Health", 1),
+    ("hinge-health", "Hinge Health", 1),
+    ("pelago", "Pelago", 1),
+    ("luca", "LUCA", 1),
+    ("understood", "Understood", 1),
+    ("emora", "EMORA", 1),
+    ("functional-parenting-coach", "Functional Parenting Coach", 1),
+    ("zheli-zhihuijia", "浙里智慧家", 2),
+    ("manatee", "Manatee", 2),
+    ("huckleberry", "Huckleberry", 2),
+    ("lumi-family", "Lumi", 2),
+    ("bridges-engage", "BRIDGES Engage", 2),
+    ("attune", "Attune", 2),
+    ("luming-zhiyin", "鹿鸣知音", 2),
+    ("qinbaobao", "亲宝宝", 2),
+    ("shiguangji", "拾光记", 2),
+    ("zhiyu-zhushou", "智育助手", 2),
+    ("joon", "Joon", 2),
+    ("dragonlock", "Dragonlock", 2),
+    ("grogo", "Grogo", 2),
+    ("parentup", "ParentUp", 2),
+    ("includedvision", "IncludedVision", 2),
+    ("ditri", "Ditri", 2),
+    ("unpluq", "Unpluq", 2),
+    ("forfeit", "Forfeit", 2),
+    ("huawei-kids-watch", "华为儿童手表 / 儿童守护体系", 2),
+    ("mango-parent", "Mango Parent", 2),
+    ("timenest", "TimeNest", 2),
+}
+
 FORBIDDEN_RUNTIME = (
     "changedetection.io",
     "rival",
@@ -66,6 +125,15 @@ def test_competitor_authority_contains_real_onboarding_set() -> None:
     header = COMPETITORS_PATH.read_text(encoding="utf-8")
     assert "AUTHORITY" in header
     assert "confirmed 55-object onboarding list" in header
+
+
+def test_competitor_authority_exact_identity_set() -> None:
+    data = yaml.safe_load(COMPETITORS_PATH.read_text(encoding="utf-8"))
+    identities = {(c["id"], c["name"], c["tier"]) for c in data["competitors"]}
+    assert identities == EXPECTED_COMPETITOR_IDENTITIES
+    # This intentionally represents the current Precision Parenting generation,
+    # not the retired Android Kinspire service.
+    assert ("kinspire", "Kinspire / Precision Parenting", 1) in identities
 
 
 def test_topic_authority_is_single_and_complete() -> None:
