@@ -1565,7 +1565,7 @@
   ],
   "demo": false,
   "evidence": [],
-  "generated_at": "2026-11-16T07:23:00Z",
+  "generated_at": "2026-11-17T02:22:51.766968Z",
   "intelligence": [],
   "manual_research": [
     {
@@ -2097,7 +2097,7 @@
     "manual_research_needed": 11,
     "top_changes": [],
     "total_changes": 0,
-    "week_end": "2026-11-17",
-    "week_start": "2026-11-09"
+    "week_end": "2026-11-18",
+    "week_start": "2026-11-10"
   }
 }
