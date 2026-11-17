@@ -9,7 +9,7 @@ import yaml
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from pipeline.schemas import CompetitorsFile
+from pipeline.schemas import CompetitorsFile, SourceType
 
 # Repo root = two levels up from this file (pipeline/config.py -> repo root).
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -110,3 +110,19 @@ def load_competitors(path: Path | None = None) -> CompetitorsFile:
     with p.open("r", encoding="utf-8") as fh:
         data = yaml.safe_load(fh) or {}
     return CompetitorsFile.model_validate(data)
+
+
+def count_dynamic_sources(cfg: CompetitorsFile | None = None) -> int:
+    """Count tracked URLs configured with SourceType.DYNAMIC."""
+    c = cfg or load_competitors()
+    return sum(
+        1
+        for comp in c.competitors
+        for url in comp.tracked_urls
+        if url.source_type == SourceType.DYNAMIC
+    )
+
+
+def requires_browser(cfg: CompetitorsFile | None = None) -> bool:
+    """Return True if active competitor configuration requires browser binaries."""
+    return count_dynamic_sources(cfg) > 0

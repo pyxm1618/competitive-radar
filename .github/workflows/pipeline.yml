@@ -23,7 +23,7 @@ permissions:
 
 jobs:
   monitor:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
       # Upstream extraction is retained for compatibility only. V1 default is
@@ -40,7 +40,24 @@ jobs:
       - name: Sync dependencies
         run: uv sync --extra dev --extra dbt --extra api --extra report
 
+      - name: Check dynamic sources requirement
+        id: check-dynamic
+        run: |
+          uv run python -c "
+          import os
+          from pipeline.config import count_dynamic_sources, requires_browser
+          count = count_dynamic_sources()
+          req = str(requires_browser()).lower()
+          print(f'Dynamic sources count: {count}')
+          print(f'Requires browser: {req}')
+          out = os.environ.get('GITHUB_OUTPUT')
+          if out:
+              with open(out, 'a', encoding='utf-8') as f:
+                  f.write(f'dynamic_count={count}\nrequires_browser={req}\n')
+          "
+
       - name: Install Playwright Chromium (dynamic sources only)
+        if: steps.check-dynamic.outputs.requires_browser == 'true'
         run: uv run playwright install --with-deps chromium
 
       # The DuckDB warehouse is the raw evidence + change authority. Persist it
